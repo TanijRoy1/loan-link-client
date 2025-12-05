@@ -36,7 +36,7 @@ body {
   font-family: "Inter", sans-serif;
 }
 .myNavLink{
-    @apply px-3 py-1 rounded-full
+    @apply px-3 py-1 rounded-full text-center
 }
 .myNavLink:hover{
     @apply text-secondary
