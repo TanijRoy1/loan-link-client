@@ -5,7 +5,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   return (
-    <footer className="bg-base-200 text-base-content mt-10 py-10 border-t border-base-300">
+    <footer className="bg-base-200 text-base-content py-10 border-t border-base-300">
       <MyContainer className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <Logo></Logo>
