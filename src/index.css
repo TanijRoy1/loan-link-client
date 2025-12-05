@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+
+  --color-primary: #2563EB;         
+  --color-secondary: #16A34A;       
+  --color-accent: #0F172A;          
+  --color-accent-content: #4B5563;  
+
+  --color-base-100: #F9FAFB;        
+  --color-base-200: #E5E7EB;      
+  --color-base-300: #D1D5DB;     
+}
+@plugin "daisyui/theme" {
+  name: "dark";
+
+  --color-primary: #3B82F6;         
+  --color-secondary: #22C55E;      
+  --color-accent: #E2E8F0;          
+  --color-accent-content: #94A3B8;  
+
+  --color-base-100: #0F172A;        
+  --color-base-200: #1E293B;        
+  --color-base-300: #334155;        
+}
+
+.fontFamily-poppins {
+  font-family: "Poppins", sans-serif;
+}
+body {
+  font-family: "Inter", sans-serif;
+}
+.myNavLink{
+    @apply px-3 py-1 rounded-full
+}
+.myNavLink:hover{
+    @apply text-secondary
+}
+.myNavLink.active{
+    @apply bg-secondary text-base-100
+}
+
+
