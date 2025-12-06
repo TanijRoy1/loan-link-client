@@ -5,9 +5,21 @@ import Logo from "../components/Logo";
 import ThemeToggle from "../components/ThemeToggle";
 import { FaBars, FaHandHoldingUsd, FaTimes } from "react-icons/fa";
 import { MdAddCard } from "react-icons/md";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const DashboardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, signOutUser } = useAuth();
+  const handleSignOutUser = () => {
+    signOutUser()
+      .then(() => {
+        toast.success("Sign Out Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -52,12 +64,33 @@ const DashboardLayout = () => {
                   <NavLink to={`/contact`} className={`myNavLink`}>
                     Contact
                   </NavLink>
-                  <Link to={`/login`} className={`btn btn-outline btn-primary`}>
-                    Login
-                  </Link>
-                  <Link to={`/register`} className={`btn btn-primary`}>
-                    Register
-                  </Link>
+                  {user ? (
+                    <>
+                      <img
+                        src={user?.photoURL}
+                        alt={user?.displayName}
+                        className="w-9 h-9 border-2 border-primary rounded-full"
+                      />
+                      <button
+                        onClick={handleSignOutUser}
+                        className="btn btn-outline btn-primary"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to={`/login`}
+                        className={`btn btn-outline btn-primary`}
+                      >
+                        Login
+                      </Link>
+                      <Link to={`/register`} className={`btn btn-primary`}>
+                        Register
+                      </Link>
+                    </>
+                  )}
                   <ThemeToggle></ThemeToggle>
                 </nav>
                 <div className="flex lg:hidden">
@@ -159,7 +192,7 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-               <li>
+              <li>
                 <NavLink
                   to={`/dashboard/add-loan`}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"

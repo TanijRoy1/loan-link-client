@@ -4,11 +4,25 @@ import MyContainer from "./MyContainer";
 import ThemeToggle from "./ThemeToggle";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, signOutUser } = useAuth();
+
+  const handleSignOutUser = () => {
+    signOutUser()
+      .then(() => {
+        toast.success("Sign Out Successfully");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
-    <div className="shadow-lg bg-base-100">
+    <div className="shadow-xl bg-base-100">
       <MyContainer>
         <header className="flex items-center justify-between fontFamily-poppins py-4">
           <Logo></Logo>
@@ -19,21 +33,41 @@ export default function Navbar() {
             <NavLink to={`all-loans`} className={`myNavLink`}>
               All Loans
             </NavLink>
-            <NavLink to={`/dashboard`} className={`myNavLink`}>
-              Dashboard
-            </NavLink>
+            {user && (
+              <NavLink to={`/dashboard`} className={`myNavLink`}>
+                Dashboard
+              </NavLink>
+            )}
             <NavLink to={`/about-us`} className={`myNavLink`}>
               About Us
             </NavLink>
             <NavLink to={`/contact`} className={`myNavLink`}>
               Contact
             </NavLink>
-            <Link to={`/login`} className={`btn btn-outline btn-primary`}>
-              Login
-            </Link>
-            <Link to={`/register`} className={`btn btn-primary`}>
-              Register
-            </Link>
+            {user ? (
+              <>
+                <img
+                  src={user?.photoURL}
+                  alt={user?.displayName}
+                  className="w-9 h-9 border-2 border-primary rounded-full"
+                />
+                <button
+                  onClick={handleSignOutUser}
+                  className="btn btn-outline btn-primary"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to={`/login`} className={`btn btn-outline btn-primary`}>
+                  Login
+                </Link>
+                <Link to={`/register`} className={`btn btn-primary`}>
+                  Register
+                </Link>
+              </>
+            )}
             <ThemeToggle></ThemeToggle>
           </nav>
           <div className="flex lg:hidden">

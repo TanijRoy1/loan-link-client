@@ -9,6 +9,10 @@ import DashboardHome from '../pages/Dashboard/DashboardHome/DashboardHome';
 import AddLoan from '../pages/Dashboard/AddLoan/AddLoan';
 import AllLoans from '../pages/AllLoans/AllLoans';
 import LoanDetails from '../pages/LoanDetails/LoanDetails';
+import AuthLayout from '../layouts/AuthLayout';
+import Login from '../pages/Auth/Login';
+import Register from '../pages/Auth/Register';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
     {
@@ -33,13 +37,13 @@ const router = createBrowserRouter([
             },
             {
                 path: "loans/:id",
-                element: <LoanDetails></LoanDetails>
+                element: <PrivateRoute><LoanDetails></LoanDetails></PrivateRoute>
             }
         ]
     },
     {
         path: "dashboard",
-        Component: DashboardLayout,
+        element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
         children: [
             {
                 index: true,
@@ -48,6 +52,20 @@ const router = createBrowserRouter([
             {
                 path: "add-loan",
                 element: <AddLoan></AddLoan>
+            },
+        ]
+    },
+    {
+        path: "/",
+        Component: AuthLayout,
+        children: [
+            {
+                path: "login",
+                Component: Login
+            },
+            {
+                path: "register",
+                Component: Register
             }
         ]
     }

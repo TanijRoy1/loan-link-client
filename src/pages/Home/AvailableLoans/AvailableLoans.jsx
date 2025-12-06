@@ -21,7 +21,7 @@ const AvailableLoans = () => {
     }
 
   return (
-    <section className="py-12">
+    <section className="py-12 bg-base-100">
       <MyContainer className="">
         <div className="flex items-center justify-between flex-wrap mb-6">
           <h2 className="text-2xl font-semibold text-accent">
@@ -41,7 +41,7 @@ const AvailableLoans = () => {
             {loans.map((loan) => (
               <div
                 key={loan._id}
-                className="bg-base-100 rounded-lg shadow-md border border-base-300 p-4 flex flex-col hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
+                className="bg-base-200 rounded-lg shadow-md border border-base-300 p-4 flex flex-col hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
               >
                 <div className="h-40 rounded overflow-hidden mb-3">
                   <img
