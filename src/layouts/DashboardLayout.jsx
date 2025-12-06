@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import Logo from "../components/Logo";
 import ThemeToggle from "../components/ThemeToggle";
 import { FaBars, FaHandHoldingUsd, FaTimes } from "react-icons/fa";
+import { MdAddCard } from "react-icons/md";
 
 const DashboardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -124,7 +125,7 @@ const DashboardLayout = () => {
               <li>
                 <NavLink
                   to={`/`}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="LoanLink"
                 >
                   <FaHandHoldingUsd className="my-1.5 inline-block size-6 text-primary" />
@@ -135,8 +136,9 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
               <li>
-                <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                <NavLink
+                  to={`/dashboard`}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right mt-8"
                   data-tip="Homepage"
                 >
                   {/* Home icon */}
@@ -154,10 +156,19 @@ const DashboardLayout = () => {
                     <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                   </svg>
                   <span className="is-drawer-close:hidden">Homepage</span>
-                </button>
+                </NavLink>
               </li>
 
-              
+               <li>
+                <NavLink
+                  to={`/dashboard/add-loan`}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                  data-tip="Add Loan"
+                >
+                  <MdAddCard className="my-1.5 inline-block size-4" />
+                  <span className="is-drawer-close:hidden">Add Loan</span>
+                </NavLink>
+              </li>
 
               {/* List item */}
               <li>

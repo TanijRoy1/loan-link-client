@@ -6,6 +6,7 @@ import AboutUs from '../pages/AboutUs/AboutUs';
 import Contact from '../pages/Contact/Contact';
 import DashboardLayout from '../layouts/DashboardLayout';
 import DashboardHome from '../pages/Dashboard/DashboardHome/DashboardHome';
+import AddLoan from '../pages/Dashboard/AddLoan/AddLoan';
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 Component: DashboardHome
+            },
+            {
+                path: "add-loan",
+                element: <AddLoan></AddLoan>
             }
         ]
     }
