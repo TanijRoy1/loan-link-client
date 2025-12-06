@@ -4,6 +4,8 @@ import MainLayout from '../layouts/MainLayout';
 import Home from '../pages/Home/Home';
 import AboutUs from '../pages/AboutUs/AboutUs';
 import Contact from '../pages/Contact/Contact';
+import DashboardLayout from '../layouts/DashboardLayout';
+import DashboardHome from '../pages/Dashboard/DashboardHome/DashboardHome';
 
 const router = createBrowserRouter([
     {
@@ -21,6 +23,16 @@ const router = createBrowserRouter([
             {
                 path: "contact",
                 Component: Contact
+            }
+        ]
+    },
+    {
+        path: "dashboard",
+        Component: DashboardLayout,
+        children: [
+            {
+                index: true,
+                Component: DashboardHome
             }
         ]
     }
