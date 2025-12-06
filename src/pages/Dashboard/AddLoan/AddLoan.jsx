@@ -1,8 +1,12 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import loadingAnimationData from "../../../assets/json/paymentLoading.json";
+import Lottie from "react-lottie";
 
-export default function AddLoan() {
+const AddLoan = () => {
   const {
     register,
     handleSubmit,
@@ -10,6 +14,8 @@ export default function AddLoan() {
   } = useForm();
 
   const [preview, setPreview] = useState("");
+  const axiosSecure = useAxiosSecure();
+  const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -23,10 +29,14 @@ export default function AddLoan() {
     data.requiredDocuments = data.requiredDocuments
       .split(",")
       .map((d) => d.trim());
+    data.createdAt = new Date();
+    data.interestRate = parseFloat(data.interestRate);
+    data.maxLoanLimit = parseInt(data.maxLoanLimit);
     const loanImg = data.image[0];
 
     const formData = new FormData();
     formData.append("image", loanImg);
+    setLoading(true);
     axios
       .post(
         `https://api.imgbb.com/1/upload?key=${
@@ -37,7 +47,19 @@ export default function AddLoan() {
       .then((res) => {
         // console.log(res.data.data.url);
         data.image = res.data.data.url;
-        console.log(data);
+        // console.log(data);
+        axiosSecure.post("/loans", data).then((res) => {
+          if (res.data.insertedId) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Your loan has been added",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setLoading(false);
+          }
+        });
       });
   };
 
@@ -88,11 +110,10 @@ export default function AddLoan() {
             <div>
               <label className="label">Interest Rate (%)</label>
               <input
-                type="number"
+                type="text"
                 step="0.01"
                 {...register("interestRate", {
                   required: true,
-                  valueAsNumber: true,
                   min: 0,
                 })}
                 className="input w-full"
@@ -111,10 +132,9 @@ export default function AddLoan() {
             <div>
               <label className="label">Max Loan Limit</label>
               <input
-                type="number"
+                type="text"
                 {...register("maxLoanLimit", {
                   required: true,
-                  valueAsNumber: true,
                   min: 1,
                 })}
                 className="input w-full"
@@ -139,7 +159,7 @@ export default function AddLoan() {
               defaultValue={"National ID, Photo"}
               placeholder="e.g., National ID, Photo"
             />
-            {errors.category && (
+            {errors.requiredDocuments && (
               <p className="text-red-500">Required Documents are required</p>
             )}
           </div>
@@ -152,7 +172,7 @@ export default function AddLoan() {
               defaultValue={"3 months, 6 months, 12 months"}
               placeholder="e.g., 6 months, 12 months, 8 months"
             />
-            {errors.category && (
+            {errors.emiPlans && (
               <p className="text-red-500"> EMI Plans are required</p>
             )}
           </div>
@@ -191,11 +211,33 @@ export default function AddLoan() {
 
           <div>
             <button type="submit" className="btn btn-primary w-full">
-              Add Loan
+              {loading ? (
+                <span className="flex gap-1">
+                  Adding{" "}
+                  <Lottie
+                    options={{
+                      loop: true,
+                      autoplay: true,
+                      animationData: loadingAnimationData,
+                      rendererSettings: {
+                        preserveAspectRatio: "xMidYMid slice",
+                      },
+                    }}
+                    height={25}
+                    width={25}
+                    isStopped={false}
+                    isPaused={false}
+                  />
+                </span>
+              ) : (
+                "Add Loan"
+              )}
             </button>
           </div>
         </fieldset>
       </form>
     </div>
   );
-}
+};
+
+export default AddLoan;
