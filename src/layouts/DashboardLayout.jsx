@@ -43,7 +43,7 @@ const DashboardLayout = () => {
                   <NavLink to={`/`} className={`myNavLink`}>
                     Home
                   </NavLink>
-                  <NavLink to={`/dashboard/all-loans`} className={`myNavLink`}>
+                  <NavLink to={`/all-loans`} className={`myNavLink`}>
                     All Loans
                   </NavLink>
                   <NavLink to={`/about-us`} className={`myNavLink`}>

@@ -8,6 +8,7 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import DashboardHome from '../pages/Dashboard/DashboardHome/DashboardHome';
 import AddLoan from '../pages/Dashboard/AddLoan/AddLoan';
 import AllLoans from '../pages/AllLoans/AllLoans';
+import LoanDetails from '../pages/LoanDetails/LoanDetails';
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: "all-loans",
                 Component: AllLoans
+            },
+            {
+                path: "loans/:id",
+                element: <LoanDetails></LoanDetails>
             }
         ]
     },

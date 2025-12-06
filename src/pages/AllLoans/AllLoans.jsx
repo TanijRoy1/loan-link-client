@@ -3,17 +3,22 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import MyContainer from "../../components/MyContainer";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const AllLoans = () => {
   const axiosPublic = useAxiosPublic();
 
-  const { data: loans = [] } = useQuery({
+  const { data: loans = [], isLoading } = useQuery({
     queryKey: ["all-loans"],
     queryFn: async () => {
       const res = await axiosPublic.get("/loans");
       return res.data;
     },
   });
+
+  if(isLoading){
+    return <LoadingSpinner></LoadingSpinner>;
+  }
 
   return (
     <section className="py-12">
