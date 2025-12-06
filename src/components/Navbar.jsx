@@ -90,24 +90,50 @@ export default function Navbar() {
               <NavLink to={`/all-loans`} className={`myNavLink`}>
                 All Loans
               </NavLink>
-              <NavLink to={`/dashboard`} className={`myNavLink`}>
-                Dashboard
-              </NavLink>
+              {user && (
+                <NavLink to={`/dashboard`} className={`myNavLink`}>
+                  Dashboard
+                </NavLink>
+              )}
               <NavLink to={`/about-us`} className={`myNavLink`}>
                 About Us
               </NavLink>
               <NavLink to={`/contact`} className={`myNavLink`}>
                 Contact
               </NavLink>
-              <Link
-                to={`/login`}
-                className={`btn btn-outline btn-primary mt-3 w-full`}
-              >
-                Login
-              </Link>
-              <Link to={`/register`} className={`btn btn-primary w-full`}>
-                Register
-              </Link>
+              {user ? (
+                <>
+                  <div className="flex items-center w-full gap-2 mt-3">
+                    <img
+                      src={user?.photoURL}
+                      alt={user?.displayName}
+                      className="w-9 h-9 border-2 border-primary rounded-full"
+                    />
+                    <h1 className="flex-1 text-lg font-semibold text-accent">
+                      {user?.displayName}
+                    </h1>
+                  </div>
+                  <button
+                    onClick={handleSignOutUser}
+                    className="btn btn-outline btn-primary w-full"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to={`/login`}
+                    className={`btn btn-outline btn-primary mt-3 w-full`}
+                  >
+                    Login
+                  </Link>
+                  <Link to={`/register`} className={`btn btn-primary w-full`}>
+                    Register
+                  </Link>
+                </>
+              )}
+
               <div className="absolute right-0 top-2">
                 <ThemeToggle></ThemeToggle>
               </div>

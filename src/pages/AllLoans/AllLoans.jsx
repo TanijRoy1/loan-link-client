@@ -21,7 +21,7 @@ const AllLoans = () => {
   }
 
   return (
-    <section className="py-12 bg-base-100">
+    <section className="py-12">
       <MyContainer className="">
         <div className="flex items-center justify-between flex-wrap mb-6">
           <h2 className="text-2xl font-semibold text-accent">All Loans</h2>

@@ -3,11 +3,12 @@ import { useParams, Link } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import useRole from "../../hooks/useRole";
 
 const LoanDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
-
+  const {role} = useRole();
 
   const { data: loan = {}, isLoading } = useQuery({
     queryKey: ["loan-details", id],
@@ -84,7 +85,8 @@ const LoanDetails = () => {
         </div>
 
         <div className="flex justify-end">
-          <Link
+          <Link 
+            disabled={role === "borrower" ? false : true}
             className="btn btn-primary"
             to={`/apply-loan/${loan._id}`}
           >
