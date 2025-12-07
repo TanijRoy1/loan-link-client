@@ -15,6 +15,7 @@ import Register from '../pages/Auth/Register';
 import PrivateRoute from './PrivateRoute';
 import LoanApplication from '../pages/LoanApplication/LoanApplication';
 import BorrowerRoute from './BorrowerRoute';
+import ManageUsers from '../pages/Dashboard/ManageUsers/ManageUsers';
 
 const router = createBrowserRouter([
     {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
                 path: "add-loan",
                 element: <AddLoan></AddLoan>
             },
+            {
+                path: "manage-users",
+                element: <ManageUsers></ManageUsers>
+            }
         ]
     },
     {
