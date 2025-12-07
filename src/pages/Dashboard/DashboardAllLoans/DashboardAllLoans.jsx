@@ -5,11 +5,16 @@ import LoadingSpinner from "../../../components/LoadingSpinner";
 import { FaTrashCan } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const DashboardAllLoans = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data: loans = [], isLoading } = useQuery({
+  const {
+    data: loans = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["all-loans"],
     queryFn: async () => {
       const res = await axiosSecure.get("/loans");
@@ -17,13 +22,37 @@ const DashboardAllLoans = () => {
     },
   });
 
-  const handleShowOnHome = (isChecked, id) => {
-    console.log(isChecked);
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/loans/${id}`).then((res) => {
+          if (res.data.deletedCount) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Loan has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
 
+  const handleShowOnHome = (isChecked, id) => {
     axiosSecure
       .patch(`/loans/${id}/show-on-home`, { showOnHome: isChecked })
       .then((res) => {
         if (res.data.modifiedCount) {
+          refetch();
           Swal.fire({
             position: "center",
             icon: "success",
@@ -90,12 +119,15 @@ const DashboardAllLoans = () => {
                   </td>
 
                   <td>
-                    <button className="btn hover:btn-primary">
+                    <button
+                      onClick={() => handleDelete(loan._id)}
+                      className="btn hover:btn-primary"
+                    >
                       <FaTrashCan />
                     </button>
-                    <button className="btn ml-2 hover:btn-primary">
+                    <Link to={`/dashboard/update-loan/${loan._id}`} className="btn ml-2 hover:btn-primary">
                       <FaEdit />
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
