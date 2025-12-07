@@ -7,10 +7,14 @@ import { FaBars, FaHandHoldingUsd, FaTimes } from "react-icons/fa";
 import { MdAddCard } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
+import { FaUsersGear } from "react-icons/fa6";
+import useRole from "../hooks/useRole";
 
 const DashboardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, signOutUser } = useAuth();
+  const { role, status } = useRole();
+
   const handleSignOutUser = () => {
     signOutUser()
       .then(() => {
@@ -218,16 +222,36 @@ const DashboardLayout = () => {
                 </NavLink>
               </li>
 
-              <li>
-                <NavLink
-                  to={`/dashboard/add-loan`}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
-                  data-tip="Add Loan"
-                >
-                  <MdAddCard className="my-1.5 inline-block size-4" />
-                  <span className="is-drawer-close:hidden">Add Loan</span>
-                </NavLink>
-              </li>
+              {role === "manager" && status === "approved" && (
+                <>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/add-loan`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Add Loan"
+                    >
+                      <MdAddCard className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">Add Loan</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {role === "admin" && status === "approved" && (
+                <>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/manage-users`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Manage Users"
+                    >
+                      <FaUsersGear className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">
+                        Manage Users
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
 
               {/* List item */}
               <li>

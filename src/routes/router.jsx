@@ -16,6 +16,7 @@ import PrivateRoute from './PrivateRoute';
 import LoanApplication from '../pages/LoanApplication/LoanApplication';
 import BorrowerRoute from './BorrowerRoute';
 import ManageUsers from '../pages/Dashboard/ManageUsers/ManageUsers';
+import AdminRoute from './AdminRoute';
 
 const router = createBrowserRouter([
     {
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "manage-users",
-                element: <ManageUsers></ManageUsers>
+                element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
             }
         ]
     },
