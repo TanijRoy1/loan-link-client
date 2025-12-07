@@ -14,6 +14,7 @@ import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import PrivateRoute from './PrivateRoute';
 import LoanApplication from '../pages/LoanApplication/LoanApplication';
+import BorrowerRoute from './BorrowerRoute';
 
 const router = createBrowserRouter([
     {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "apply-loan/:id",
-                element: <LoanApplication></LoanApplication>
+                element: <PrivateRoute><BorrowerRoute><LoanApplication></LoanApplication></BorrowerRoute></PrivateRoute>
             }
         ]
     },

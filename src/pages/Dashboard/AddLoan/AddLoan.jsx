@@ -15,7 +15,7 @@ const AddLoan = () => {
 
   const [preview, setPreview] = useState("");
   const axiosSecure = useAxiosSecure();
-  const [loading, setLoading] = useState(false);
+  const [postLoading, setPostLoading] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -29,14 +29,13 @@ const AddLoan = () => {
     data.requiredDocuments = data.requiredDocuments
       .split(",")
       .map((d) => d.trim());
-    data.createdAt = new Date();
     data.interestRate = parseFloat(data.interestRate);
     data.maxLoanLimit = parseInt(data.maxLoanLimit);
     const loanImg = data.image[0];
 
     const formData = new FormData();
     formData.append("image", loanImg);
-    setLoading(true);
+    setPostLoading(true);
     axios
       .post(
         `https://api.imgbb.com/1/upload?key=${
@@ -57,8 +56,12 @@ const AddLoan = () => {
               showConfirmButton: false,
               timer: 1500,
             });
-            setLoading(false);
+            setPostLoading(false);
           }
+        }).catch(err => {
+          console.log(err);
+          
+          setPostLoading(false);
         });
       });
   };
@@ -211,7 +214,7 @@ const AddLoan = () => {
 
           <div>
             <button type="submit" className="btn btn-primary w-full">
-              {loading ? (
+              {postLoading ? (
                 <span className="flex gap-1">
                   Adding{" "}
                   <Lottie
