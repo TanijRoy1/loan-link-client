@@ -3,12 +3,21 @@ import { Link, NavLink, Outlet } from "react-router";
 import Footer from "../components/Footer";
 import Logo from "../components/Logo";
 import ThemeToggle from "../components/ThemeToggle";
-import { FaBars, FaHandHoldingUsd, FaTimes } from "react-icons/fa";
-import { MdAddCard } from "react-icons/md";
+import {
+  FaBars,
+  FaCheckCircle,
+  FaClipboardList,
+  FaFileSignature,
+  FaHandHoldingUsd,
+  FaTimes,
+  FaUserCircle,
+} from "react-icons/fa";
+import { MdAddCard, MdLibraryBooks, MdPendingActions } from "react-icons/md";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import { FaUsersGear } from "react-icons/fa6";
 import useRole from "../hooks/useRole";
+import { RiBankLine } from "react-icons/ri";
 
 const DashboardLayout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -234,6 +243,52 @@ const DashboardLayout = () => {
                       <span className="is-drawer-close:hidden">Add Loan</span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/manage-loans`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Manage Loans"
+                    >
+                      <RiBankLine className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">
+                        Manage Loans
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/pending-loans`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Pending Applications"
+                    >
+                      <MdPendingActions className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">
+                        Pending Applications
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/approved-loans`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Approved Applications"
+                    >
+                      <FaCheckCircle className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">
+                        Approved Applications
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/profile`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="My Profile"
+                    >
+                      <FaUserCircle className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">My Profile</span>
+                    </NavLink>
+                  </li>
                 </>
               )}
               {role === "admin" && status === "approved" && (
@@ -250,34 +305,55 @@ const DashboardLayout = () => {
                       </span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/all-loan`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="All Loans"
+                    >
+                      <MdLibraryBooks className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">All Loans</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/loan-applications`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="Loan Applications"
+                    >
+                      <FaFileSignature className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">
+                        Loan Applications
+                      </span>
+                    </NavLink>
+                  </li>
                 </>
               )}
 
-              {/* List item */}
-              <li>
-                <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Settings"
-                >
-                  {/* Settings icon */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                    strokeWidth="2"
-                    fill="none"
-                    stroke="currentColor"
-                    className="my-1.5 inline-block size-4"
-                  >
-                    <path d="M20 7h-9"></path>
-                    <path d="M14 17H5"></path>
-                    <circle cx="17" cy="17" r="3"></circle>
-                    <circle cx="7" cy="7" r="3"></circle>
-                  </svg>
-                  <span className="is-drawer-close:hidden">Settings</span>
-                </button>
-              </li>
+              {role === "borrower" && status === "approved" && (
+                <>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/my-loans`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="My Loans"
+                    >
+                      <FaClipboardList className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">My Loans</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to={`/dashboard/profile`}
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                      data-tip="My Profile"
+                    >
+                      <FaUserCircle className="my-1.5 inline-block size-4" />
+                      <span className="is-drawer-close:hidden">My Profile</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

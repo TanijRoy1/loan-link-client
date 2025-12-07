@@ -113,7 +113,7 @@ const ManageUsers = () => {
   };
 
   return (
-    <section className="py-10">
+    <section className="py-8">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-2xl font-semibold mb-4">Manage Users</h2>
 
