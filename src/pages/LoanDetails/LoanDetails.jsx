@@ -11,7 +11,7 @@ const LoanDetails = () => {
   const {role} = useRole();
 
   const { data: loan = {}, isLoading } = useQuery({
-    queryKey: ["loan-details", id],
+    queryKey: ["loan", id],
     queryFn: async () => {
       const res = await axiosSecure.get(`/loans/${id}`);
       return res.data;

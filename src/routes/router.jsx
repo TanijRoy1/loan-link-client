@@ -13,6 +13,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import PrivateRoute from './PrivateRoute';
+import LoanApplication from '../pages/LoanApplication/LoanApplication';
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             {
                 path: "loans/:id",
                 element: <PrivateRoute><LoanDetails></LoanDetails></PrivateRoute>
+            },
+            {
+                path: "apply-loan/:id",
+                element: <LoanApplication></LoanApplication>
             }
         ]
     },
