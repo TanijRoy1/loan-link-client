@@ -25,6 +25,7 @@ import LoanApplications from '../pages/Dashboard/LoanApplications/LoanApplicatio
 import ManageLoans from '../pages/Dashboard/ManageLoans/ManageLoans';
 import PendingApplications from '../pages/Dashboard/PendingApplications/PendingApplications';
 import ApprovedApplications from '../pages/Dashboard/ApprovedApplications/ApprovedApplications';
+import MyProfile from '../pages/Dashboard/MyProfile/MyProfile';
 
 const router = createBrowserRouter([
     {
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
                 path: "update-loan/:id",
                 element: <NotBorrowerRoute><UpdateLoan></UpdateLoan></NotBorrowerRoute>
             },
+            {
+                path: "profile",
+                element: <MyProfile></MyProfile>
+            }
             
         ]
     },

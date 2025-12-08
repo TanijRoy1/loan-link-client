@@ -123,10 +123,7 @@ const DashboardLayout = () => {
                     <NavLink to={`/`} className={`myNavLink`}>
                       Home
                     </NavLink>
-                    <NavLink
-                      to={`/all-loans`}
-                      className={`myNavLink`}
-                    >
+                    <NavLink to={`/all-loans`} className={`myNavLink`}>
                       All Loans
                     </NavLink>
                     <NavLink to={`/about-us`} className={`myNavLink`}>
@@ -279,16 +276,6 @@ const DashboardLayout = () => {
                       </span>
                     </NavLink>
                   </li>
-                  <li>
-                    <NavLink
-                      to={`/dashboard/profile`}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
-                      data-tip="My Profile"
-                    >
-                      <FaUserCircle className="my-1.5 inline-block size-4" />
-                      <span className="is-drawer-close:hidden">My Profile</span>
-                    </NavLink>
-                  </li>
                 </>
               )}
               {role === "admin" && status === "approved" && (
@@ -331,28 +318,28 @@ const DashboardLayout = () => {
               )}
 
               {role === "borrower" && status === "approved" && (
-                <>
-                  <li>
-                    <NavLink
-                      to={`/dashboard/my-loans`}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
-                      data-tip="My Loans"
-                    >
-                      <FaClipboardList className="my-1.5 inline-block size-4" />
-                      <span className="is-drawer-close:hidden">My Loans</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to={`/dashboard/profile`}
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
-                      data-tip="My Profile"
-                    >
-                      <FaUserCircle className="my-1.5 inline-block size-4" />
-                      <span className="is-drawer-close:hidden">My Profile</span>
-                    </NavLink>
-                  </li>
-                </>
+                <li>
+                  <NavLink
+                    to={`/dashboard/my-loans`}
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                    data-tip="My Loans"
+                  >
+                    <FaClipboardList className="my-1.5 inline-block size-4" />
+                    <span className="is-drawer-close:hidden">My Loans</span>
+                  </NavLink>
+                </li>
+              )}
+              {(role === "manager" || role === "borrower") && (
+                <li>
+                  <NavLink
+                    to={`/dashboard/profile`}
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right dashboardNavLink"
+                    data-tip="My Profile"
+                  >
+                    <FaUserCircle className="my-1.5 inline-block size-4" />
+                    <span className="is-drawer-close:hidden">My Profile</span>
+                  </NavLink>
+                </li>
               )}
             </ul>
           </div>
