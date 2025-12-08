@@ -24,6 +24,7 @@ import ManagerRoute from './ManagerRoute';
 import LoanApplications from '../pages/Dashboard/LoanApplications/LoanApplications';
 import ManageLoans from '../pages/Dashboard/ManageLoans/ManageLoans';
 import PendingApplications from '../pages/Dashboard/PendingApplications/PendingApplications';
+import ApprovedApplications from '../pages/Dashboard/ApprovedApplications/ApprovedApplications';
 
 const router = createBrowserRouter([
     {
@@ -87,6 +88,10 @@ const router = createBrowserRouter([
             {
                 path: "pending-loans",
                 element: <ManagerRoute><PendingApplications></PendingApplications></ManagerRoute>
+            },
+            {
+                path: "approved-loans",
+                element: <ManagerRoute><ApprovedApplications></ApprovedApplications></ManagerRoute>
             },
             {
                 path: "update-loan/:id",
