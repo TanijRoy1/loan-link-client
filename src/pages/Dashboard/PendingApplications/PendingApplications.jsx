@@ -2,21 +2,79 @@ import React, { useRef, useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import Swal from "sweetalert2";
 
-const LoanApplications = () => {
+const PendingApplications = () => {
   const axiosSecure = useAxiosSecure();
-  const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
-  const { data: applications = [], isLoading } = useQuery({
-    queryKey: ["applications", selectedStatus],
+  const {
+    data: applications = [],
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["loan-applications", "pending"],
     queryFn: async () => {
-      const url = `/loan-applications?status=${selectedStatus}`;
-      const res = await axiosSecure.get(url);
+      const res = await axiosSecure.get("/loan-applications?status=pending");
       return res.data;
     },
   });
+
+  const handleApproveApplication = (application) => {
+    Swal.fire({
+      title: "Approve Application?",
+      text: "Are you sure you want to approve this application? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedApplication = { status: "approved" };
+        axiosSecure
+          .patch(`/loan-applications/${application._id}`, updatedApplication)
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              refetch();
+              Swal.fire({
+                title: "Approved",
+                text: "The loan application has been successfully approved.",
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
+  };
+  const handleRejectApplication = (application) => {
+    Swal.fire({
+      title: "Reject Application?",
+      text: "Are you sure you want to reject this application? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedApplication = { status: "rejected" };
+        axiosSecure
+          .patch(`/loan-applications/${application._id}`, updatedApplication)
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              refetch();
+              Swal.fire({
+                title: "Rejected",
+                text: "The application has been rejected.",
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
+  };
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
@@ -24,37 +82,26 @@ const LoanApplications = () => {
   };
 
   return (
-    <div className="py-8">
+    <section className="py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center gap-4 flex-wrap">
-          <h2 className="text-2xl font-semibold mb-4">Loan Applications</h2>
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="select"
-          >
-            <option value="">Pick a status</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
+        <h2 className="text-2xl font-semibold mb-4">
+          Pending Loan Applications
+        </h2>
 
-        <div>
+        <div className="mt-4">
           {isLoading ? (
             <LoadingSpinner></LoadingSpinner>
           ) : (
             <div>
-              <div className="hidden lg:block overflow-x-auto mt-4">
-                <table className="table text-center">
+              <div className="hidden lg:block overflow-x-auto">
+                <table className="table  text-center">
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Loan ID</th>
-                      <th>User</th>
-                      <th>Category</th>
+                      <th className="text-left">Loan ID</th>
+                      <th className="text-left">User Info</th>
                       <th>Amount</th>
-                      <th>Status</th>
+                      <th>Date</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -70,43 +117,37 @@ const LoanApplications = () => {
                         </td>
                         <td className="text-left">
                           <p className="font-semibold">
-                            {application.firstName} {application.lastName}
+                            {application?.firstName} {application.lastName}
                           </p>
-                          <p>{application.userEmail}</p>
-                        </td>
-                        <td>{application?.loanCategory}</td>
-                        <td>{application?.loanAmount}</td>
-                        <td className="flex flex-col gap-2 items-center">
-                          <p
-                            className={`px-2 py-0.5 rounded-full font-semibold capitalize border ${
-                              application?.status === "pending"
-                                ? "text-yellow-600"
-                                : application?.status === "approved"
-                                ? "text-green-600"
-                                : application?.status === "rejected"
-                                ? "text-red-600"
-                                : ""
-                            }`}
-                          >
-                            {application?.status}
-                          </p>
-
-                          <p
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize border ${
-                              application?.applicationFeeStatus === "paid"
-                                ? "border-green-500  text-green-700"
-                                : application?.applicationFeeStatus === "unpaid"
-                                ? "border-red-500 text-red-700"
-                                : ""
-                            }`}
-                          >
-                            {application?.applicationFeeStatus}
+                          <p className="text-accent-content">
+                            {application.userEmail}
                           </p>
                         </td>
+                        <td>BDT {application.loanAmount}</td>
                         <td>
+                          {new Date(application.createdAt).toLocaleString()}
+                        </td>
+
+                        <td className="flex flex-wrap gap-2 items-center justify-center">
+                          <button
+                            onClick={() =>
+                              handleApproveApplication(application)
+                            }
+                            className="btn btn-sm bg-green-600 text-white hover:bg-green-700"
+                          >
+                            Approve
+                          </button>
+
+                          <button
+                            onClick={() => handleRejectApplication(application)}
+                            className="btn btn-sm bg-red-600 text-white hover:bg-red-700"
+                          >
+                            Reject
+                          </button>
+
                           <button
                             onClick={() => openDetailsModal(application)}
-                            className="btn btn-primary"
+                            className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700"
                           >
                             View
                           </button>
@@ -118,69 +159,65 @@ const LoanApplications = () => {
               </div>
 
               {/* Mobile View */}
-              <div className="lg:hidden space-y-3 mt-4">
+              <div className="lg:hidden space-y-4">
                 {applications.map((application, i) => (
                   <div
                     key={application._id}
-                    className="card bg-base-100 border border-base-300 shadow-sm p-4"
+                    className="card bg-base-100 p-4 shadow-sm border border-base-200"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold truncate text-accent-content">
-                            {application.loanTitle}
-                          </h4>
-                          <span className="text-xs text-accent-content">
-                            {i + 1}
-                          </span>
-                        </div>
-                        <p className="text-xs text-accent-content mt-1">
-                          {application.loanId}
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold text-accent-content truncate">
+                          {application.loanTitle}
+                        </h4>
+                        <span className="text-xs text-accent-content">
+                          #{i + 1}
+                        </span>
+                      </div>
+
+                      <p className="text-xs text-accent-content">
+                        {application.loanId}
+                      </p>
+
+                      <div className="text-sm text-accent-content">
+                        <p className="font-medium">
+                          {application.firstName} {application.lastName}
                         </p>
-
-                        <div className="mt-2 text-sm text-accent-content">
-                          <p className="font-medium">
-                            {application.firstName} {application.lastName}
-                          </p>
-                          <p className="text-xs truncate">
-                            {application.userEmail}
-                          </p>
-                        </div>
-
-                        <p className="text-xs mt-2 font-semibold text-accent-content">
-                          Category:{" "}
-                          <span className="font-normal">
-                            {application?.loanCategory || "N/A"}
-                          </span>
+                        <p className="text-xs truncate">
+                          {application.userEmail}
                         </p>
+                      </div>
 
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-semibold capitalize border ${
-                              application?.status === "approved"
-                                ? "border-green-500 text-green-600"
-                                : application?.status === "rejected"
-                                ? "border-red-500 text-red-600"
-                                : "border-yellow-500 text-yellow-600"
-                            }`}
-                          >
-                            {application?.status}
-                          </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm text-accent-content">
+                          Amount: BDT {application.loanAmount}
+                        </span>
+                        <span className="text-xs text-accent-content">
+                          {new Date(application.createdAt).toLocaleString()}
+                        </span>
+                      </div>
 
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize border ${
-                              application?.applicationFeeStatus === "paid"
-                                ? "border-green-500 text-green-600"
-                                : "border-red-500 text-red-600"
-                            }`}
-                          >
-                            {application?.applicationFeeStatus}
-                          </span>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        <button
+                          onClick={() => handleApproveApplication(application)}
+                          className="btn btn-sm bg-green-600 text-white hover:bg-green-700 flex-1"
+                        >
+                          Approve
+                        </button>
 
-                          <span className="text-xs ml-auto text-accent-content">
-                            BDT {application?.loanAmount}
-                          </span>
-                        </div>
+                        <button
+                          onClick={() => handleRejectApplication(application)}
+                          className="btn btn-sm bg-red-600 text-white hover:bg-red-700 flex-1"
+                        >
+                          Reject
+                        </button>
+
+                        <button
+                          onClick={() => openDetailsModal(application)}
+                          className="btn btn-sm bg-blue-600 text-white hover:bg-blue-700 flex-1"
+                        >
+                          View
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -348,8 +385,8 @@ const LoanApplications = () => {
           </div>
         </dialog>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default LoanApplications;
+export default PendingApplications;

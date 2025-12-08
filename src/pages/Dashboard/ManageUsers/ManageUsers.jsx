@@ -42,7 +42,7 @@ const ManageUsers = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Agree",
+      confirmButtonText: "Yes, approve",
     }).then((result) => {
       if (result.isConfirmed) {
         const updateUser = { status: "approved", role: user?.role };
@@ -68,7 +68,7 @@ const ManageUsers = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Agree",
+      confirmButtonText: "Yes, update",
     }).then((result) => {
       if (result.isConfirmed) {
         const updateUser = { status: data?.status, role: data?.role };
@@ -94,7 +94,7 @@ const ManageUsers = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Agree",
+      confirmButtonText: "Yes, suspend",
     }).then((result) => {
       if (result.isConfirmed) {
         const updateUser = { status: "suspended", role: data?.role };

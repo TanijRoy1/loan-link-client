@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -14,6 +14,7 @@ const LoanApplicationForm = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [postLoading, setPostLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -52,6 +53,7 @@ const LoanApplicationForm = () => {
             timer: 1500,
           });
           setPostLoading(false);
+          navigate("/dashboard");
         }
       })
       .catch((err) => {

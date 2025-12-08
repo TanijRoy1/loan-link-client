@@ -72,7 +72,7 @@ const DashboardAllLoans = () => {
     return <LoadingSpinner></LoadingSpinner>;
   }
   return (
-    <div className="py-8">
+    <section className="py-8">
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl font-semibold mb-4">All Loans</h2>
 
@@ -138,7 +138,7 @@ const DashboardAllLoans = () => {
           </table>
         </div>
 
-        {/* Mobile: card list */}
+        {/* Mobile View */}
         <div className="lg:hidden space-y-3">
           {loans.map((loan) => (
             <div
@@ -203,7 +203,7 @@ const DashboardAllLoans = () => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

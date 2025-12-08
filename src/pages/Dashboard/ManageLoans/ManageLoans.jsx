@@ -91,7 +91,7 @@ const ManageLoans = () => {
                     <tr>
                       <th>#</th>
                       <th className="text-left">Image</th>
-                      <th>Title</th>
+                      <th className="text-left">Title</th>
                       <th>Interest</th>
                       <th>Category</th>
 
@@ -110,11 +110,12 @@ const ManageLoans = () => {
                           />
                         </td>
                         <td className="text-left">
-                          <span className="xl:text-lg font-semibold">
+                          <span className="font-semibold">
                             {loan.title}
                           </span>
                         </td>
                         <td>{loan.interestRate}%</td>
+                        
                         <td>{loan.category}</td>
 
                         <td className="min-w-35">
