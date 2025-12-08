@@ -13,7 +13,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
 import PrivateRoute from './PrivateRoute';
-import LoanApplication from '../pages/LoanApplication/LoanApplication';
+import LoanApplicationForm from '../pages/LoanApplicationForm/LoanApplicationForm';
 import BorrowerRoute from './BorrowerRoute';
 import ManageUsers from '../pages/Dashboard/ManageUsers/ManageUsers';
 import AdminRoute from './AdminRoute';
@@ -21,6 +21,7 @@ import DashboardAllLoans from '../pages/Dashboard/DashboardAllLoans/DashboardAll
 import NotBorrowerRoute from './NotBorrowerRoute';
 import UpdateLoan from '../pages/Dashboard/UpdateLoan/UpdateLoan';
 import ManagerRoute from './ManagerRoute';
+import LoanApplications from '../pages/Dashboard/LoanApplications/LoanApplications';
 
 const router = createBrowserRouter([
     {
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "apply-loan/:id",
-                element: <PrivateRoute><BorrowerRoute><LoanApplication></LoanApplication></BorrowerRoute></PrivateRoute>
+                element: <PrivateRoute><BorrowerRoute><LoanApplicationForm></LoanApplicationForm></BorrowerRoute></PrivateRoute>
             }
         ]
     },
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
             {
                 path: "all-loan",
                 element: <AdminRoute><DashboardAllLoans></DashboardAllLoans></AdminRoute>
+            },
+            {
+                path: "loan-applications",
+                element: <AdminRoute><LoanApplications></LoanApplications></AdminRoute>
             },
             {
                 path: "update-loan/:id",

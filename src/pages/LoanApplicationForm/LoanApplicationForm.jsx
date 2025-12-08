@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import Lottie from "react-lottie";
 import loadingAnimationData from "../../assets/json/paymentLoading.json";
 
-const LoanApplication = () => {
+const LoanApplicationForm = () => {
   const { id: loanId } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
@@ -31,6 +31,7 @@ const LoanApplication = () => {
 
   const handleApplyLoan = (data) => {
     data.loanId = loan?._id || loanId;
+    data.loanCategory = loan.category;
     data.interestRate = parseFloat(data.interestRate);
     data.monthlyIncome = parseInt(data.monthlyIncome);
     data.loanAmount = parseInt(data.loanAmount);
@@ -269,4 +270,4 @@ const LoanApplication = () => {
   );
 };
 
-export default LoanApplication;
+export default LoanApplicationForm;

@@ -102,7 +102,7 @@ const DashboardAllLoans = () => {
                     />
                   </td>
                   <td className="text-left">
-                    <span className="text-lg font-semibold">{loan.title}</span>
+                    <span className="xl:text-lg font-semibold">{loan.title}</span>
                   </td>
                   <td>{loan.interestRate}%</td>
                   <td>{loan.category}</td>
@@ -118,14 +118,17 @@ const DashboardAllLoans = () => {
                     />
                   </td>
 
-                  <td>
+                  <td className="min-w-35">
                     <button
                       onClick={() => handleDelete(loan._id)}
                       className="btn hover:btn-primary"
                     >
                       <FaTrashCan />
                     </button>
-                    <Link to={`/dashboard/update-loan/${loan._id}`} className="btn ml-2 hover:btn-primary">
+                    <Link
+                      to={`/dashboard/update-loan/${loan._id}`}
+                      className="btn ml-2 hover:btn-primary"
+                    >
                       <FaEdit />
                     </Link>
                   </td>
@@ -136,63 +139,69 @@ const DashboardAllLoans = () => {
         </div>
 
         {/* Mobile: card list */}
-  <div className="lg:hidden space-y-3">
-    {loans.map((loan, i) => (
-      <div
-        key={loan._id}
-        className="flex flex-col sm:flex-row items-start sm:items-center justify-between  shadow-sm rounded-lg p-3"
-      >
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden border">
-            <img
-              src={loan.image}
-              alt={loan.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold truncate">{loan.title}</h3>
-              <span className="text-xs">{i + 1}</span>
+        <div className="lg:hidden space-y-3">
+          {loans.map((loan) => (
+            <div
+              key={loan._id}
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between  shadow-sm rounded-lg p-3"
+            >
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden border">
+                  <img
+                    src={loan.image}
+                    alt={loan.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold truncate">
+                      {loan.title}
+                    </h3>
+                   
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1 truncate">
+                    {loan.category} • {loan.interestRate}% interest
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1 truncate">
+                    By {loan?.createdBy}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 sm:mt-0 flex items-center gap-2">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={!!loan.showOnHome}
+                    onChange={(e) =>
+                      handleShowOnHome(e.target.checked, loan._id)
+                    }
+                    className="checkbox checkbox-primary"
+                    aria-label={`Show ${loan.title} on home`}
+                  />
+                  <span className="text-xs">Home</span>
+                </label>
+
+                <button
+                  onClick={() => handleDelete(loan._id)}
+                  className="btn btn-sm"
+                  aria-label={`Delete ${loan.title}`}
+                >
+                  <FaTrashCan />
+                </button>
+
+                <Link
+                  to={`/dashboard/update-loan/${loan._id}`}
+                  className="btn btn-sm"
+                  aria-label={`Edit ${loan.title}`}
+                >
+                  <FaEdit />
+                </Link>
+              </div>
             </div>
-            <p className="text-xs text-gray-500 mt-1 truncate">
-              {loan.category} • {loan.interestRate}% interest
-            </p>
-            <p className="text-xs text-gray-400 mt-1 truncate">By {loan?.createdBy}</p>
-          </div>
+          ))}
         </div>
-
-        <div className="mt-3 sm:mt-0 flex items-center gap-2">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={!!loan.showOnHome}
-              onChange={(e) => handleShowOnHome(e.target.checked, loan._id)}
-              className="checkbox checkbox-primary"
-              aria-label={`Show ${loan.title} on home`}
-            />
-            <span className="text-xs">Home</span>
-          </label>
-
-          <button
-            onClick={() => handleDelete(loan._id)}
-            className="btn btn-sm"
-            aria-label={`Delete ${loan.title}`}
-          >
-            <FaTrashCan />
-          </button>
-
-          <Link
-            to={`/dashboard/update-loan/${loan._id}`}
-            className="btn btn-sm"
-            aria-label={`Edit ${loan.title}`}
-          >
-            <FaEdit />
-          </Link>
-        </div>
-      </div>
-    ))}
-  </div>
       </div>
     </div>
   );
