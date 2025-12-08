@@ -22,6 +22,7 @@ import NotBorrowerRoute from './NotBorrowerRoute';
 import UpdateLoan from '../pages/Dashboard/UpdateLoan/UpdateLoan';
 import ManagerRoute from './ManagerRoute';
 import LoanApplications from '../pages/Dashboard/LoanApplications/LoanApplications';
+import ManageLoans from '../pages/Dashboard/ManageLoans/ManageLoans';
 
 const router = createBrowserRouter([
     {
@@ -63,10 +64,6 @@ const router = createBrowserRouter([
                 Component: DashboardHome
             },
             {
-                path: "add-loan",
-                element: <ManagerRoute><AddLoan></AddLoan></ManagerRoute>
-            },
-            {
                 path: "manage-users",
                 element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>
             },
@@ -79,9 +76,18 @@ const router = createBrowserRouter([
                 element: <AdminRoute><LoanApplications></LoanApplications></AdminRoute>
             },
             {
+                path: "add-loan",
+                element: <ManagerRoute><AddLoan></AddLoan></ManagerRoute>
+            },
+            {
+                path: "manage-loans",
+                element: <ManagerRoute><ManageLoans></ManageLoans></ManagerRoute>
+            },
+            {
                 path: "update-loan/:id",
                 element: <NotBorrowerRoute><UpdateLoan></UpdateLoan></NotBorrowerRoute>
             },
+            
         ]
     },
     {
