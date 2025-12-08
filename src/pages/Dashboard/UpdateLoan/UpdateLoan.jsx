@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import axios from "axios";
+import Lottie from "react-lottie";
+import loadingAnimationData from "../../../assets/json/paymentLoading.json";
+import Swal from "sweetalert2";
 
 const UpdateLoan = () => {
   const {
@@ -14,8 +18,9 @@ const UpdateLoan = () => {
 
   const [preview, setPreview] = useState("");
   const axiosSecure = useAxiosSecure();
-  const [postLoading, setPostLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const {
     data: loan = {},
@@ -40,7 +45,46 @@ const UpdateLoan = () => {
   };
 
   const handleUpdate = (data) => {
-    console.log(data);
+    data.emiPlans = data.emiPlans.split(",").map((p) => p.trim());
+    data.interestRate = parseFloat(data.interestRate);
+    data.maxLoanLimit = parseInt(data.maxLoanLimit);
+    const loanImg = data.image[0];
+
+    const formData = new FormData();
+    formData.append("image", loanImg);
+    setUpdateLoading(true);
+    axios
+      .post(
+        `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_host_key
+        }`,
+        formData
+      )
+      .then((res) => {
+        // console.log(res.data.data.url);
+        data.image = res.data.data.url;
+        // console.log(data);
+        axiosSecure
+          .patch(`/loans/${id}`, data)
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Loan has been updated successfully",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+              setUpdateLoading(false);
+              navigate("/dashboard");
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+
+            setUpdateLoading(false);
+          });
+      });
   };
 
   if (isLoading) {
@@ -179,10 +223,10 @@ const UpdateLoan = () => {
 
           <div>
             <button type="submit" className="btn btn-primary w-full">
-              {postLoading ? (
+              {updateLoading ? (
                 <span className="flex gap-1">
                   Updating{" "}
-                  {/* <Lottie
+                  <Lottie
                     options={{
                       loop: true,
                       autoplay: true,
@@ -195,7 +239,7 @@ const UpdateLoan = () => {
                     width={25}
                     isStopped={false}
                     isPaused={false}
-                  /> */}
+                  />
                 </span>
               ) : (
                 "Update Loan"

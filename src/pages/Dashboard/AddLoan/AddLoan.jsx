@@ -5,6 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import loadingAnimationData from "../../../assets/json/paymentLoading.json";
 import Lottie from "react-lottie";
+import useAuth from "../../../hooks/useAuth";
 
 const AddLoan = () => {
   const {
@@ -13,6 +14,7 @@ const AddLoan = () => {
     formState: { errors },
   } = useForm();
 
+  const { user } = useAuth();
   const [preview, setPreview] = useState("");
   const axiosSecure = useAxiosSecure();
   const [postLoading, setPostLoading] = useState(false);
@@ -25,6 +27,7 @@ const AddLoan = () => {
   };
 
   const handleAddLoan = (data) => {
+    data.createdBy = user?.email;
     data.emiPlans = data.emiPlans.split(",").map((p) => p.trim());
     data.requiredDocuments = data.requiredDocuments
       .split(",")
@@ -47,22 +50,25 @@ const AddLoan = () => {
         // console.log(res.data.data.url);
         data.image = res.data.data.url;
         // console.log(data);
-        axiosSecure.post("/loans", data).then((res) => {
-          if (res.data.insertedId) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Your loan has been added",
-              showConfirmButton: false,
-              timer: 1500,
-            });
+        axiosSecure
+          .post("/loans", data)
+          .then((res) => {
+            if (res.data.insertedId) {
+              Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Your loan has been added",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              setPostLoading(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+
             setPostLoading(false);
-          }
-        }).catch(err => {
-          console.log(err);
-          
-          setPostLoading(false);
-        });
+          });
       });
   };
 

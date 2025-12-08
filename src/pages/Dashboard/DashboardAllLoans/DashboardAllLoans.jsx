@@ -76,7 +76,7 @@ const DashboardAllLoans = () => {
       <div className="max-w-7xl mx-auto px-4">
         <h2 className="text-2xl font-semibold mb-4">All Loans</h2>
 
-        <div className="overflow-x-auto">
+        <div className="hidden lg:block overflow-x-auto">
           <table className="table  text-center">
             <thead>
               <tr>
@@ -106,7 +106,7 @@ const DashboardAllLoans = () => {
                   </td>
                   <td>{loan.interestRate}%</td>
                   <td>{loan.category}</td>
-                  <td>{loan?.createdAt}</td>
+                  <td>{loan?.createdBy}</td>
                   <td>
                     <input
                       type="checkbox"
@@ -134,6 +134,65 @@ const DashboardAllLoans = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile: card list */}
+  <div className="lg:hidden space-y-3">
+    {loans.map((loan, i) => (
+      <div
+        key={loan._id}
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between  shadow-sm rounded-lg p-3"
+      >
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden border">
+            <img
+              src={loan.image}
+              alt={loan.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold truncate">{loan.title}</h3>
+              <span className="text-xs">{i + 1}</span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1 truncate">
+              {loan.category} • {loan.interestRate}% interest
+            </p>
+            <p className="text-xs text-gray-400 mt-1 truncate">By {loan?.createdBy}</p>
+          </div>
+        </div>
+
+        <div className="mt-3 sm:mt-0 flex items-center gap-2">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={!!loan.showOnHome}
+              onChange={(e) => handleShowOnHome(e.target.checked, loan._id)}
+              className="checkbox checkbox-primary"
+              aria-label={`Show ${loan.title} on home`}
+            />
+            <span className="text-xs">Home</span>
+          </label>
+
+          <button
+            onClick={() => handleDelete(loan._id)}
+            className="btn btn-sm"
+            aria-label={`Delete ${loan.title}`}
+          >
+            <FaTrashCan />
+          </button>
+
+          <Link
+            to={`/dashboard/update-loan/${loan._id}`}
+            className="btn btn-sm"
+            aria-label={`Edit ${loan.title}`}
+          >
+            <FaEdit />
+          </Link>
+        </div>
+      </div>
+    ))}
+  </div>
       </div>
     </div>
   );

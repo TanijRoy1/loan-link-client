@@ -20,6 +20,7 @@ import AdminRoute from './AdminRoute';
 import DashboardAllLoans from '../pages/Dashboard/DashboardAllLoans/DashboardAllLoans';
 import NotBorrowerRoute from './NotBorrowerRoute';
 import UpdateLoan from '../pages/Dashboard/UpdateLoan/UpdateLoan';
+import ManagerRoute from './ManagerRoute';
 
 const router = createBrowserRouter([
     {
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "add-loan",
-                element: <AddLoan></AddLoan>
+                element: <ManagerRoute><AddLoan></AddLoan></ManagerRoute>
             },
             {
                 path: "manage-users",
