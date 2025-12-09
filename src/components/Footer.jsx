@@ -27,7 +27,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/all-loans" className="hover:text-primary">
+              <Link to="/all-loans" className="hover:text-primary">
                 All Loans
               </Link>
             </li>

@@ -82,7 +82,7 @@ const DashboardAllLoans = () => {
               <tr>
                 <th>#</th>
                 <th>Image</th>
-                <th>Title</th>
+                <th className="text-left">Title</th>
                 <th>Interest</th>
                 <th>Category</th>
                 <th>Created By</th>
@@ -102,7 +102,7 @@ const DashboardAllLoans = () => {
                     />
                   </td>
                   <td className="text-left">
-                    <span className="xl:text-lg font-semibold">{loan.title}</span>
+                    <span className="font-semibold">{loan.title}</span>
                   </td>
                   <td>{loan.interestRate}%</td>
                   <td>{loan.category}</td>

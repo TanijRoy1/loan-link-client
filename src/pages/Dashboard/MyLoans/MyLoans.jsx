@@ -1,22 +1,35 @@
 import React, { useRef, useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
-const LoanApplications = () => {
+const MyLoans = () => {
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
   const { data: applications = [], isLoading } = useQuery({
-    queryKey: ["applications", selectedStatus],
+    queryKey: ["applications", user?.email],
     queryFn: async () => {
-      const url = `/loan-applications?status=${selectedStatus}`;
-      const res = await axiosSecure.get(url);
+      const res = await axiosSecure.get(
+        `/loan-applications?email=${user?.email}`
+      );
       return res.data;
     },
   });
+
+  const handlePayment = async (application) => {
+    const paymentInfo = {
+      userEmail: application.userEmail,
+      applicationId: application._id,
+      loanTitle: application.loanTitle,
+    };
+    const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
+    // console.log(res.data);
+    window.location.assign(res.data.url);
+  };
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
@@ -26,19 +39,7 @@ const LoanApplications = () => {
   return (
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center gap-4 flex-wrap">
-          <h2 className="text-2xl font-semibold mb-4">Loan Applications</h2>
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="select"
-          >
-            <option value="">Pick a status</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="rejected">Rejected</option>
-          </select>
-        </div>
+        <h2 className="text-2xl font-semibold mb-4">My Loans</h2>
 
         <div>
           {isLoading ? (
@@ -51,8 +52,7 @@ const LoanApplications = () => {
                     <tr>
                       <th>#</th>
                       <th className="text-left">Loan ID</th>
-                      <th className="text-left">User</th>
-                      <th>Category</th>
+                      <th className="text-left">Loan Info</th>
                       <th>Amount</th>
                       <th>Status</th>
                       <th>Actions</th>
@@ -63,18 +63,15 @@ const LoanApplications = () => {
                       <tr key={application._id}>
                         <td>{i + 1}</td>
                         <td className="text-left">
-                          <p className="font-semibold">
-                            {application.loanTitle}
-                          </p>
                           <p>{application.loanId}</p>
                         </td>
                         <td className="text-left">
                           <p className="font-semibold">
-                            {application.firstName} {application.lastName}
+                            {application.loanTitle}
                           </p>
-                          <p>{application.userEmail}</p>
+                          <p>{application.loanCategory}</p>
+                          <p>{application.interestRate}</p>
                         </td>
-                        <td>{application?.loanCategory}</td>
                         <td>{application?.loanAmount}</td>
                         <td className="flex flex-col gap-2 items-center">
                           <p
@@ -88,7 +85,7 @@ const LoanApplications = () => {
                                 : ""
                             }`}
                           >
-                            {application?.status}
+                            {application?.status || "N/A"}
                           </p>
 
                           <p
@@ -103,88 +100,37 @@ const LoanApplications = () => {
                             {application?.applicationFeeStatus}
                           </p>
                         </td>
-                        <td>
-                          <button
-                            onClick={() => openDetailsModal(application)}
-                            className="btn btn-primary"
-                          >
-                            View
-                          </button>
+                        <td className="">
+                          <div className="flex items-center justify-center gap-1 flex-col">
+                            <div className="flex gap-1"><button
+                              onClick={() => openDetailsModal(application)}
+                              className="btn btn-sm btn-primary"
+                            >
+                              View
+                            </button>
+                            {application.status === "pending" && (
+                              <button className="btn btn-sm bg-red-600 text-white">
+                                Cancel
+                              </button>
+                            )}</div>
+                            {application.applicationFeeStatus === "paid" ? (
+                              <p className="px-3 py-1 rounded-full text-xs font-semibold capitalize border border-green-500 text-green-600">
+                                Paid
+                              </p>
+                            ) : (
+                              <button
+                                onClick={() => handlePayment(application)}
+                                className="btn btn-sm bg-secondary text-white"
+                              >
+                                Pay
+                              </button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Mobile View */}
-              <div className="lg:hidden space-y-3 mt-4">
-                {applications.map((application, i) => (
-                  <div
-                    key={application._id}
-                    className="card bg-base-100 border border-base-300 shadow-sm p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-semibold truncate text-accent-content">
-                            {application.loanTitle}
-                          </h4>
-                          <span className="text-xs text-accent-content">
-                            {i + 1}
-                          </span>
-                        </div>
-                        <p className="text-xs text-accent-content mt-1">
-                          {application.loanId}
-                        </p>
-
-                        <div className="mt-2 text-sm text-accent-content">
-                          <p className="font-medium">
-                            {application.firstName} {application.lastName}
-                          </p>
-                          <p className="text-xs truncate">
-                            {application.userEmail}
-                          </p>
-                        </div>
-
-                        <p className="text-xs mt-2 font-semibold text-accent-content">
-                          Category:{" "}
-                          <span className="font-normal">
-                            {application?.loanCategory || "N/A"}
-                          </span>
-                        </p>
-
-                        <div className="mt-3 flex flex-wrap items-center gap-2">
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-semibold capitalize border ${
-                              application?.status === "approved"
-                                ? "border-green-500 text-green-600"
-                                : application?.status === "rejected"
-                                ? "border-red-500 text-red-600"
-                                : "border-yellow-500 text-yellow-600"
-                            }`}
-                          >
-                            {application?.status}
-                          </span>
-
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize border ${
-                              application?.applicationFeeStatus === "paid"
-                                ? "border-green-500 text-green-600"
-                                : "border-red-500 text-red-600"
-                            }`}
-                          >
-                            {application?.applicationFeeStatus}
-                          </span>
-
-                          <span className="text-xs ml-auto text-accent-content">
-                            BDT {application?.loanAmount}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           )}
@@ -352,4 +298,4 @@ const LoanApplications = () => {
   );
 };
 
-export default LoanApplications;
+export default MyLoans;

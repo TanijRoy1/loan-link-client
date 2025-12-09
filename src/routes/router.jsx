@@ -26,6 +26,9 @@ import ManageLoans from '../pages/Dashboard/ManageLoans/ManageLoans';
 import PendingApplications from '../pages/Dashboard/PendingApplications/PendingApplications';
 import ApprovedApplications from '../pages/Dashboard/ApprovedApplications/ApprovedApplications';
 import MyProfile from '../pages/Dashboard/MyProfile/MyProfile';
+import MyLoans from '../pages/Dashboard/MyLoans/MyLoans';
+import PaymentSuccess from '../pages/Dashboard/Payment/PaymentSuccess';
+import PaymentCancelled from '../pages/Dashboard/Payment/PaymentCancelled';
 
 const router = createBrowserRouter([
     {
@@ -93,6 +96,18 @@ const router = createBrowserRouter([
             {
                 path: "approved-loans",
                 element: <ManagerRoute><ApprovedApplications></ApprovedApplications></ManagerRoute>
+            },
+            {
+                path: "my-loans",
+                element: <BorrowerRoute><MyLoans></MyLoans></BorrowerRoute>
+            },
+            {
+                path: "payment-success",
+                element: <BorrowerRoute><PaymentSuccess></PaymentSuccess></BorrowerRoute>
+            },
+            {
+                path: "payment-cancelled",
+                element: <BorrowerRoute><PaymentCancelled></PaymentCancelled></BorrowerRoute>
             },
             {
                 path: "update-loan/:id",

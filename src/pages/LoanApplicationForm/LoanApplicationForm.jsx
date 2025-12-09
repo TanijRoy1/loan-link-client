@@ -36,7 +36,7 @@ const LoanApplicationForm = () => {
     data.interestRate = parseFloat(data.interestRate);
     data.monthlyIncome = parseInt(data.monthlyIncome);
     data.loanAmount = parseInt(data.loanAmount);
-    data.status = "pending";
+    data.status = "applied";
     data.applicationFeeStatus = "unpaid";
     // console.log(data);
 
