@@ -53,7 +53,7 @@ const LoanApplicationForm = () => {
             timer: 1500,
           });
           setPostLoading(false);
-          navigate("/dashboard");
+          navigate("/dashboard/my-loans");
         }
       })
       .catch((err) => {

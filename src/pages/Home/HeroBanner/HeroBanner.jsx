@@ -24,14 +24,14 @@ const HeroBanner = () => {
 
           <div className="flex flex-wrap gap-4">
             <Link
-              to="/apply-loan"
+              to="/dashboard"
               className="btn btn-primary px-8 py-6 font-semibold"
             >
-              Apply for Loan
+              Go to Dashboard
             </Link>
 
             <Link
-              to="/dashboard/all-loans"
+              to="/all-loans"
               className="btn btn-outline hover:btn-primary px-8 py-6 font-semibold"
             >
               Explore Loans
