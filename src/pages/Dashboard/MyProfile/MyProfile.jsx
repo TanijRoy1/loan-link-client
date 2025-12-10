@@ -63,64 +63,83 @@ const MyProfile = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-2 w-full mt-4 text-accent-content text-sm">
-          <div className="flex items-center gap-1">
-            <div className="flex gap-1">
-              <FaUserTag className="text-accent-content" />
-              <p className="text-xs uppercase font-semibold">Role:</p>
+          <div className="flex items-start gap-2 mb-4">
+            <div className="text-primary mt-1">
+              <FaUserTag />
             </div>
-            <span
-              className={`px-2 py-0.5 rounded-full font-medium capitalize border ${
-                user.role === "manager"
-                  ? "text-blue-600 border-blue-500"
-                  : user.role === "borrower"
-                  ? "text-purple-600 border-purple-500"
-                  : "text-accent-content border-base-300"
-              }`}
-            >
-              {user.role}
-            </span>
+            <div>
+              <div className="text-sm text-muted uppercase font-semibold">
+                Role
+              </div>
+              <span
+                className={`px-2 py-0.5 rounded-full font-medium capitalize border block ${
+                  user.role === "manager"
+                    ? "text-blue-600 border-blue-500"
+                    : user.role === "borrower"
+                    ? "text-purple-600 border-purple-500"
+                    : "text-accent-content border-base-300"
+                }`}
+              >
+                {user.role}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 mb-4">
+            <div className="text-primary mt-1">
+              <FaCheckCircle />
+            </div>
+            <div>
+              <div className="text-sm text-muted uppercase font-semibold">
+                Status
+              </div>
+              <span
+                className={`px-2 py-0.5 rounded-full font-medium capitalize block ${
+                  user.status === "approved"
+                    ? "text-green-600 border border-green-500"
+                    : user.status === "pending"
+                    ? "text-yellow-600 border border-yellow-500"
+                    : "text-red-600 border border-red-500"
+                }`}
+              >
+                {user.status}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1">
-            <div className="flex gap-1">
-              <FaCheckCircle className="text-accent-content" />
-              <p className="text-xs uppercase font-semibold">Status:</p>
+          <div className="flex items-start gap-2 mb-4">
+            <div className="text-primary mt-1">
+              <FaEnvelope />
             </div>
-            <span
-              className={`px-2 py-0.5 rounded-full font-medium capitalize ${
-                user.status === "approved"
-                  ? "text-green-600 border border-green-500"
-                  : user.status === "pending"
-                  ? "text-yellow-600 border border-yellow-500"
-                  : "text-red-600 border border-red-500"
-              }`}
-            >
-              {user.status}
-            </span>
+            <div>
+              <div className="text-sm text-muted uppercase font-semibold">
+                Email
+              </div>
+              <a className="text-accent-content text-sm link">{user.email}</a>
+            </div>
           </div>
-
-          <div className="flex items-center gap-1">
-            <div className="flex gap-1">
-              <FaEnvelope className="text-accent-content" />
-              <p className="text-xs uppercase font-semibold">Email: </p>
+          <div className="flex items-start gap-2 mb-4">
+            <div className="text-primary mt-1">
+              <FaCalendarAlt />
             </div>
-            <span className="truncate">{user.email}</span>
+            <div>
+              <div className="text-sm text-muted uppercase font-semibold">
+                Created At
+              </div>
+              <span className="text-accent-content text-sm">
+                {new Date(user.createdAt).toLocaleString()}
+              </span>
+            </div>
           </div>
-
-          <div className="flex items-center gap-1">
-            <div className="flex gap-1">
-              <FaCalendarAlt className="text-accent-content" />
-              <p className="text-xs uppercase font-semibold">Created At:</p>
+          <div className="flex items-start gap-2 mb-4">
+            <div className="text-primary mt-1">
+              <FaIdBadge />
             </div>
-            <span>{new Date(user.createdAt).toLocaleString()}</span>
-          </div>
-
-          <div className="flex items-center flex-wrap gap-1">
-            <div className="flex gap-1">
-              <FaIdBadge className="text-accent-content" />
-              <p className="text-xs uppercase font-semibold">Record ID:</p>
+            <div>
+              <div className="text-sm text-muted uppercase font-semibold">
+                Record ID
+              </div>
+              <span className="text-accent-content text-sm">{user._id}</span>
             </div>
-            <span className="font-mono truncate">{user._id}</span>
           </div>
         </div>
 

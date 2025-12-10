@@ -3,6 +3,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
+import Swal from "sweetalert2";
 
 const MyLoans = () => {
   const { user } = useAuth();
@@ -10,7 +11,11 @@ const MyLoans = () => {
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
-  const { data: applications = [], isLoading } = useQuery({
+  const {
+    data: applications = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["applications", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -29,6 +34,32 @@ const MyLoans = () => {
     const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
     // console.log(res.data);
     window.location.assign(res.data.url);
+  };
+  const handleCancel = (id) => {
+    Swal.fire({
+      title: "Cancel Application?",
+      text: "Are you sure you want to cancel this application? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure
+          .patch(`/loan-applications/${id}`, { status: "applied" })
+          .then((res) => {
+            if (res.data.modifiedCount) {
+              refetch();
+              Swal.fire({
+                title: "Cancelled",
+                text: "Your application has been successfully cancelled.",
+                icon: "success",
+              });
+            }
+          });
+      }
+    });
   };
 
   const openDetailsModal = (application) => {
@@ -69,8 +100,8 @@ const MyLoans = () => {
                           <p className="font-semibold">
                             {application.loanTitle}
                           </p>
-                          <p>{application.loanCategory}</p>
-                          <p>{application.interestRate}</p>
+                          <p>Category: {application.loanCategory}</p>
+                          <p>Interest Rate: {application.interestRate}</p>
                         </td>
                         <td>{application?.loanAmount}</td>
                         <td className="flex flex-col gap-2 items-center">
@@ -102,17 +133,22 @@ const MyLoans = () => {
                         </td>
                         <td className="">
                           <div className="flex items-center justify-center gap-1 flex-col">
-                            <div className="flex gap-1"><button
-                              onClick={() => openDetailsModal(application)}
-                              className="btn btn-sm btn-primary"
-                            >
-                              View
-                            </button>
-                            {application.status === "pending" && (
-                              <button className="btn btn-sm bg-red-600 text-white">
-                                Cancel
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => openDetailsModal(application)}
+                                className="btn btn-sm btn-primary"
+                              >
+                                View
                               </button>
-                            )}</div>
+                              {application.status === "pending" && (
+                                <button
+                                  onClick={() => handleCancel(application._id)}
+                                  className="btn btn-sm bg-red-600 text-white"
+                                >
+                                  Cancel
+                                </button>
+                              )}
+                            </div>
                             {application.applicationFeeStatus === "paid" ? (
                               <p className="px-3 py-1 rounded-full text-xs font-semibold capitalize border border-green-500 text-green-600">
                                 Paid
@@ -131,6 +167,101 @@ const MyLoans = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+
+              {/* Mobile View */}
+              <div className="lg:hidden mt-4 space-y-3">
+                {applications.map((application) => (
+                  <div
+                    key={application._id}
+                    className="bg-base-100 border border-base-300 shadow-sm rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-semibold truncate">
+                            {application.loanTitle || application.loanId}
+                          </h3>
+                          <p className="text-xs text-accent-content truncate">
+                            Loan ID: {application.loanId}
+                          </p>
+                          <p className="text-xs text-accent-content mt-1 truncate">
+                            Category: {application.loanCategory || "N/A"} •
+                            Interest: {application.interestRate || "N/A"}
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <div
+                            className={`px-2 py-0.5 rounded-full text-xs font-semibold capitalize border ${
+                              application?.status === "pending"
+                                ? "text-yellow-600 border-yellow-200"
+                                : application?.status === "approved"
+                                ? "text-green-600 border-green-200"
+                                : application?.status === "rejected"
+                                ? "text-red-600 border-red-200"
+                                : "text-accent-content border-accent-content"
+                            }`}
+                          >
+                            {application?.status || "N/A"}
+                          </div>
+
+                          <div className="mt-2">
+                            <div
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize border inline-block ${
+                                application?.applicationFeeStatus === "paid"
+                                  ? "border-green-500 text-green-700"
+                                  : application?.applicationFeeStatus ===
+                                    "unpaid"
+                                  ? "border-red-500 text-red-700"
+                                  : "text-accent-content border-accent-content"
+                              }`}
+                            >
+                              {application?.applicationFeeStatus || "N/A"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-sm text-accent-content mt-3">
+                        Amount: {application?.loanAmount ?? "N/A"}
+                      </p>
+                    </div>
+
+                    <div className="shrink-0 flex flex-col items-end gap-2">
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => openDetailsModal(application)}
+                          className="btn btn-sm btn-primary"
+                        >
+                          View
+                        </button>
+
+                        {application.status === "pending" && (
+                          <button
+                            onClick={() => handleCancel(application._id)}
+                            className="btn btn-sm bg-red-600 text-white"
+                          >
+                            Cancel
+                          </button>
+                        )}
+                      </div>
+
+                      {application.applicationFeeStatus === "paid" ? (
+                        <p className="px-3 py-1 rounded-full text-xs font-semibold capitalize border border-green-500 text-green-600">
+                          Paid
+                        </p>
+                      ) : (
+                        <button
+                          onClick={() => handlePayment(application)}
+                          className="btn btn-sm bg-secondary text-white"
+                        >
+                          Pay
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
