@@ -46,7 +46,7 @@ const HowItWorks = () => {
           {steps.map((step) => (
             <div
               key={step.id}
-              className="p-6 bg-base-100 rounded-xl shadow hover:shadow-lg transition-all duration-300 text-center"
+              className="p-6 bg-base-100 rounded-xl shadow hover:shadow-lg transition-all transform hover:-translate-y-1  duration-300 text-center"
             >
               <div className="flex justify-center mb-4">{step.icon}</div>
               <h3 className="text-lg font-semibold text-accent mb-2">{step.title}</h3>
