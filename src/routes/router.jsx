@@ -29,11 +29,13 @@ import MyProfile from '../pages/Dashboard/MyProfile/MyProfile';
 import MyLoans from '../pages/Dashboard/MyLoans/MyLoans';
 import PaymentSuccess from '../pages/Dashboard/Payment/PaymentSuccess';
 import PaymentCancelled from '../pages/Dashboard/Payment/PaymentCancelled';
+import PageNotFound from '../pages/PageNotFound/PageNotFound';
 
 const router = createBrowserRouter([
     {
         path: "/",
         Component: MainLayout,
+        errorElement: <PageNotFound></PageNotFound>,
         children: [
             {
                 index: true,
@@ -133,6 +135,10 @@ const router = createBrowserRouter([
                 Component: Register
             }
         ]
+    },
+    {
+        path: "*",
+        Component: PageNotFound
     }
 ])
 

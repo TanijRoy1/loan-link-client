@@ -3,12 +3,10 @@ import React, { useState } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
-  const limit = 10;
-  const [currentPage, setCurrentPage] = useState(0);
-
   const {
     register,
     handleSubmit,
@@ -16,11 +14,23 @@ const ManageUsers = () => {
     reset,
   } = useForm();
 
-  const { data: data = [], refetch } = useQuery({
-    queryKey: ["users", currentPage, limit],
+  const limit = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const [searchText, setSearchText] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
+
+  const {
+    data: data = [],
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ["users", currentPage, limit, searchText, selectedRole],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/users?limit=${limit}&skip=${currentPage * limit}`
+        `/users?limit=${limit}&skip=${
+          currentPage * limit
+        }&searchText=${searchText}&role=${selectedRole}`
       );
       return res.data;
     },
@@ -29,6 +39,15 @@ const ManageUsers = () => {
   const users = data.users || [];
   const totalUsersCount = data.count || 0;
   const totalPages = Math.ceil(totalUsersCount / limit);
+
+  const handleSearch = (e) => {
+    setSearchText(e.target.value);
+    setCurrentPage(0);
+  };
+  const handleFilter = (e) => {
+    setSelectedRole(e.target.value);
+    setCurrentPage(0);
+  };
 
   const [editingUser, setEditingUser] = useState(null);
   const openEdit = (user) => setEditingUser({ ...user });
@@ -126,149 +145,198 @@ const ManageUsers = () => {
     <section className="py-8">
       <div className="max-w-6xl mx-auto px-4">
         <h2 className="text-2xl font-semibold mb-4">Manage Users</h2>
-
-        <div className="hidden lg:block overflow-x-auto">
-          <table className="table table-zebra">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, i) => (
-                <tr key={user._id}>
-                  <th>{i + 1}</th>
-                  <td>{user.displayName}</td>
-                  <td>{user.email}</td>
-                  <td>
-                    <span
-                      className={`${
-                        user.role === "admin"
-                          ? "text-blue-600"
-                          : user.role === "manager"
-                          ? "text-purple-600"
-                          : "text-green-600"
-                      } border rounded px-2 py-1 capitalize`}
-                    >
-                      {user.role}
-                    </span>
-                  </td>
-
-                  <td>
-                    <span
-                      className={`${
-                        user.status === "approved"
-                          ? "text-green-600"
-                          : user.status === "suspended"
-                          ? "text-red-600"
-                          : "text-gray-600"
-                      } capitalize`}
-                    >
-                      {user.status || "pending"}
-                    </span>
-                  </td>
-
-                  <td>
-                    <button
-                      onClick={() => handleApprove(user)}
-                      className="btn btn-primary btn-sm"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => openSuspend(user)}
-                      className="btn btn-secondary btn-sm mx-2"
-                    >
-                      Suspend
-                    </button>
-                    <button
-                      onClick={() => openEdit(user)}
-                      className="btn btn-primary btn-outline btn-sm"
-                    >
-                      Edit
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="flex justify-between gap-2 flex-wrap">
+          <label className="input">
+            <svg
+              className="h-[1em] opacity-50"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <g
+                strokeLinejoin="round"
+                strokeLinecap="round"
+                strokeWidth="2.5"
+                fill="none"
+                stroke="currentColor"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </g>
+            </svg>
+            <input
+              type="search"
+              value={searchText}
+              onChange={(e) => handleSearch(e)}
+              required
+              placeholder="Search"
+            />
+          </label>
+          <select
+            value={selectedRole}
+            onChange={(e) => handleFilter(e)}
+            className="select"
+          >
+            <option value="">Pick a role</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="borrower">Borrower</option>
+          </select>
         </div>
 
-        {/* Mobile views */}
-        <div className="lg:hidden block space-y-4">
-          {users.map((user) => (
-            <div
-              key={user._id}
-              className="bg-base-100 border rounded-lg p-4 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3">
-                    <div className="min-w-0">
-                      <div className="font-medium truncate">
-                        {user.displayName}
+        <div className="mt-4">
+          {isLoading ? (
+            <LoadingSpinner></LoadingSpinner>
+          ) : users.length === 0 ? (
+            <h1 className="text-center border border-base-300 shadow-inner py-10 rounded-lg text-2xl font-bold text-accent-content">
+              Users Not Found
+            </h1>
+          ) : (
+            <div>
+              <div className="hidden lg:block overflow-x-auto">
+                <table className="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((user, i) => (
+                      <tr key={user._id}>
+                        <th>{i + 1}</th>
+                        <td>{user.displayName}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <span
+                            className={`${
+                              user.role === "admin"
+                                ? "text-blue-600"
+                                : user.role === "manager"
+                                ? "text-purple-600"
+                                : "text-green-600"
+                            } border rounded px-2 py-1 capitalize`}
+                          >
+                            {user.role}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span
+                            className={`${
+                              user.status === "approved"
+                                ? "text-green-600"
+                                : user.status === "suspended"
+                                ? "text-red-600"
+                                : "text-gray-600"
+                            } capitalize`}
+                          >
+                            {user.status || "pending"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <button
+                            onClick={() => handleApprove(user)}
+                            className="btn btn-primary btn-sm"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => openSuspend(user)}
+                            className="btn btn-secondary btn-sm mx-2"
+                          >
+                            Suspend
+                          </button>
+                          <button
+                            onClick={() => openEdit(user)}
+                            className="btn btn-primary btn-outline btn-sm"
+                          >
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile views */}
+              <div className="lg:hidden block space-y-4">
+                {users.map((user) => (
+                  <div
+                    key={user._id}
+                    className="bg-base-100 border rounded-lg p-4 shadow-sm"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-0">
+                            <div className="font-medium truncate">
+                              {user.displayName}
+                            </div>
+                            <div className="text-xs text-gray-500 truncate">
+                              {user.email}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <span
+                            className={`${
+                              user.role === "admin"
+                                ? "text-blue-600"
+                                : user.role === "manager"
+                                ? "text-purple-600"
+                                : "text-green-600"
+                            } border rounded px-2 py-1 capitalize text-xs`}
+                          >
+                            {user.role}
+                          </span>
+
+                          <span
+                            className={`${
+                              user.status === "approved"
+                                ? "text-green-600"
+                                : user.status === "suspended"
+                                ? "text-red-600"
+                                : "text-gray-600"
+                            } capitalize text-xs`}
+                          >
+                            {user.status || "pending"}
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-500 truncate">
-                        {user.email}
+
+                      <div className="flex flex-col items-end gap-2">
+                        <button
+                          onClick={() => handleApprove(user)}
+                          className="btn btn-primary btn-xs"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => openSuspend(user)}
+                          className="btn btn-secondary btn-xs"
+                        >
+                          Suspend
+                        </button>
+                        <button
+                          onClick={() => openEdit(user)}
+                          className="btn btn-primary btn-outline btn-xs"
+                        >
+                          Edit
+                        </button>
                       </div>
                     </div>
                   </div>
-
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <span
-                      className={`${
-                        user.role === "admin"
-                          ? "text-blue-600"
-                          : user.role === "manager"
-                          ? "text-purple-600"
-                          : "text-green-600"
-                      } border rounded px-2 py-1 capitalize text-xs`}
-                    >
-                      {user.role}
-                    </span>
-
-                    <span
-                      className={`${
-                        user.status === "approved"
-                          ? "text-green-600"
-                          : user.status === "suspended"
-                          ? "text-red-600"
-                          : "text-gray-600"
-                      } capitalize text-xs`}
-                    >
-                      {user.status || "pending"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end gap-2">
-                  <button
-                    onClick={() => handleApprove(user)}
-                    className="btn btn-primary btn-xs"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => openSuspend(user)}
-                    className="btn btn-secondary btn-xs"
-                  >
-                    Suspend
-                  </button>
-                  <button
-                    onClick={() => openEdit(user)}
-                    className="btn btn-primary btn-outline btn-xs"
-                  >
-                    Edit
-                  </button>
-                </div>
+                ))}
               </div>
             </div>
-          ))}
+          )}
         </div>
 
         {/* Pagination button */}
