@@ -176,7 +176,7 @@ const ManageUsers = () => {
             onChange={(e) => handleFilter(e)}
             className="select"
           >
-            <option value="">Pick a role</option>
+            <option value="">Pick a Role</option>
             <option value="admin">Admin</option>
             <option value="manager">Manager</option>
             <option value="borrower">Borrower</option>
@@ -208,7 +208,7 @@ const ManageUsers = () => {
                     {users.map((user, i) => (
                       <tr key={user._id}>
                         <th>{i + 1}</th>
-                        <td>{user.displayName}</td>
+                        <td className="font-semibold">{user.displayName}</td>
                         <td>{user.email}</td>
                         <td>
                           <span
@@ -231,7 +231,7 @@ const ManageUsers = () => {
                                 ? "text-green-600"
                                 : user.status === "suspended"
                                 ? "text-red-600"
-                                : "text-gray-600"
+                                : "text-accent-content"
                             } capitalize`}
                           >
                             {user.status || "pending"}
@@ -278,7 +278,7 @@ const ManageUsers = () => {
                             <div className="font-medium truncate">
                               {user.displayName}
                             </div>
-                            <div className="text-xs text-gray-500 truncate">
+                            <div className="text-xs text-accent-content truncate">
                               {user.email}
                             </div>
                           </div>
@@ -303,7 +303,7 @@ const ManageUsers = () => {
                                 ? "text-green-600"
                                 : user.status === "suspended"
                                 ? "text-red-600"
-                                : "text-gray-600"
+                                : "text-accent-content"
                             } capitalize text-xs`}
                           >
                             {user.status || "pending"}

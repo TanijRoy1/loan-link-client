@@ -5,13 +5,13 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
   FaClock,
-  FaTwitter,
   FaFacebookF,
   FaLinkedinIn,
 } from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import MyContainer from "../../components/MyContainer";
+import { FaXTwitter } from "react-icons/fa6";
 
 const Contact = () => {
   const {
@@ -119,7 +119,7 @@ const Contact = () => {
               <h4 className="font-semibold text-accent mb-3">Follow us</h4>
               <div className="flex items-center justify-center gap-4 text-accent-content">
                 <a href="#" className="hover:text-primary">
-                  <FaTwitter />
+                  <FaXTwitter />
                 </a>
                 <a href="#" className="hover:text-primary">
                   <FaFacebookF />
