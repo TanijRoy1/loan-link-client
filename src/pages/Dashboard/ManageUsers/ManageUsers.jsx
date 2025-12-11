@@ -6,12 +6,30 @@ import { useForm } from "react-hook-form";
 
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
+  const limit = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
+
+  const { data: data = [], refetch } = useQuery({
+    queryKey: ["users", currentPage, limit],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/users?limit=${limit}&skip=${currentPage * limit}`
+      );
+      return res.data;
+    },
+  });
+
+  const users = data.users || [];
+  const totalUsersCount = data.count || 0;
+  const totalPages = Math.ceil(totalUsersCount / limit);
+
   const [editingUser, setEditingUser] = useState(null);
   const openEdit = (user) => setEditingUser({ ...user });
   const closeEdit = () => {
@@ -25,14 +43,6 @@ const ManageUsers = () => {
     setSuspendingUser(null);
     reset();
   };
-
-  const { data: users = [], refetch } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const res = await axiosSecure.get("/users");
-      return res.data;
-    },
-  });
 
   const handleApprove = (user) => {
     Swal.fire({
@@ -189,7 +199,7 @@ const ManageUsers = () => {
           </table>
         </div>
 
-        {/* Mobile cards for small screens */}
+        {/* Mobile views */}
         <div className="lg:hidden block space-y-4">
           {users.map((user) => (
             <div
@@ -261,6 +271,35 @@ const ManageUsers = () => {
           ))}
         </div>
 
+        {/* Pagination button */}
+        <div className="flex gap-2 justify-center py-10">
+          {currentPage > 0 && (
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="btn btn-sm"
+            >
+              Prev
+            </button>
+          )}
+          {[...Array(totalPages).keys()].map((i) => (
+            <button
+              onClick={() => setCurrentPage(i)}
+              key={i}
+              className={`btn btn-sm ${currentPage === i && "btn-primary"}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          {currentPage < totalPages - 1 && (
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              className="btn btn-sm"
+            >
+              Next
+            </button>
+          )}
+        </div>
+
         {/* Edit Modal */}
         {editingUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -327,7 +366,7 @@ const ManageUsers = () => {
             </div>
           </div>
         )}
-        
+
         {/* Suspend Modal */}
         {suspendingUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">

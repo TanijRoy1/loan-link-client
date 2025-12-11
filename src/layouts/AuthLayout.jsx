@@ -15,13 +15,13 @@ const AuthLayout = () => {
           <h2 className="text-3xl font-bold text-accent mb-4">
             Welcome to Our Loan Portal
           </h2>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-accent-content leading-relaxed">
             Access flexible loans tailored to your needs. Login or create an
             account to manage your loan applications, view EMI plans, track loan
             status, and enjoy a seamless financial experience.
           </p>
 
-          <ul className="mt-6 space-y-3 text-gray-700">
+          <ul className="mt-6 space-y-3 text-accent-content ">
             <li>✔ Easy and secure login</li>
             <li>✔ Quick loan approval process</li>
             <li>✔ Transparent interest rates</li>
