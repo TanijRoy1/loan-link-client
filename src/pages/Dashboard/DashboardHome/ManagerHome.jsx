@@ -4,7 +4,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 
-const AdminHome = () => {
+const ManagerHome = () => {
   const axiosSecure = useAxiosSecure();
 
   const {
@@ -30,13 +30,13 @@ const AdminHome = () => {
     },
   });
   const {
-    data: usersByRole = [],
-    isLoading: userLoading,
-    refetch: userRefetch,
+    data: applicationsByCategory = [],
+    isLoading: categryLoading,
+    refetch: categoryRefetch,
   } = useQuery({
-    queryKey: ["usersByRole"],
+    queryKey: ["applicationsByCategory"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/users-stats/role");
+      const res = await axiosSecure.get("/applications/stats/top-categories");
       return res.data;
     },
   });
@@ -47,7 +47,7 @@ const AdminHome = () => {
     });
   };
 
-  if (isLoading || applicationLoading || userLoading) {
+  if (isLoading || applicationLoading || categryLoading) {
     return <LoadingSpinner></LoadingSpinner>;
   }
   const statusMap = Object.fromEntries(
@@ -58,14 +58,14 @@ const AdminHome = () => {
   const handleRefetch = () => {
     refetch();
     applicationRefetch();
-    userRefetch();
+    categoryRefetch();
   };
 
   return (
     <div className="py-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">LoanLink — Admin Dashboard</h1>
+          <h1 className="text-2xl font-bold">LoanLink — Manager Dashboard</h1>
           <p className="text-sm text-accent-content">
             Overview of applications, revenue and users
           </p>
@@ -170,65 +170,15 @@ const AdminHome = () => {
         </div>
 
         <div className="bg-primary/10 p-4 rounded-2xl shadow">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-semibold">Users by Role</h3>
-            <div className="text-sm text-accent-content">
-              Total: {usersByRole.reduce((a, b) => a + b.count, 0)}
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {usersByRole.map((r) => (
-              <div key={r._id} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-base-100 flex items-center justify-center text-sm font-medium">
-                    {r._id[0].toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="font-medium">{r._id}</div>
-                    <div className="text-xs text-accent-content">
-                      {r.count} users
-                    </div>
-                  </div>
-                </div>
-                <div className="text-sm text-accent-content">
-                  {Math.round(
-                    (r.count / usersByRole.reduce((a, b) => a + b.count, 0)) *
-                      100
-                  )}
-                  %
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-4 h-45 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
-            <div className="h-full w-88">
-              <PieChart
-                style={{
-                  width: "100%",
-                  maxWidth: "500px",
-                  maxHeight: "80vh",
-                  aspectRatio: 2,
-                }}
-                responsive
-              >
-                <Pie
-                  dataKey="value"
-                  startAngle={180}
-                  endAngle={0}
-                  data={getPiechartData(usersByRole)}
-                  cx="50%"
-                  cy="100%"
-                  outerRadius="120%"
-                  fill="#8884d8"
-                  label
-                  isAnimationActive={true}
-                />
-                <Legend></Legend>
-                <Tooltip></Tooltip>
-              </PieChart>
-            </div>
+          <div className="">
+            <h3 className="text-lg font-semibold mb-2">Top Categories</h3>
+            <ul className="space-y-2 text-sm text-accent-content">
+              {applicationsByCategory.map((stat) => (
+                <li key={stat.category || "Education"}>
+                  {stat.category || "Education"} — {stat.count}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -247,4 +197,4 @@ const AdminHome = () => {
   );
 };
 
-export default AdminHome;
+export default ManagerHome;

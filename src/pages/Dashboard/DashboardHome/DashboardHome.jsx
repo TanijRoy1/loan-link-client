@@ -2,6 +2,8 @@ import React from 'react';
 import useRole from '../../../hooks/useRole';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import AdminHome from './AdminHome';
+import ManagerHome from './ManagerHome';
+import BorrowerHome from './BorrowerHome';
 
 const DashboardHome = () => {
     const {role, roleLoading} = useRole();
@@ -12,9 +14,9 @@ const DashboardHome = () => {
     if (role === "admin") {
         return <AdminHome></AdminHome>;
     } else if (role === "manager") {
-        return <div>Manager Home</div>;
+        return <ManagerHome></ManagerHome>;
     } else {
-        return <div>Borrower Home</div>;
+        return <BorrowerHome></BorrowerHome>;
     }
 
 };
