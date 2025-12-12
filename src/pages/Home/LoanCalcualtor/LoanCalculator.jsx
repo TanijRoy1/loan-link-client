@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaCalculator } from "react-icons/fa";
 import MyContainer from "../../../components/MyContainer";
 import { useForm } from "react-hook-form";
+import { motion } from "motion/react";
 
 const LoanCalculator = () => {
   const { register, handleSubmit } = useForm();
@@ -21,12 +22,20 @@ const LoanCalculator = () => {
     setEmi(emiValue.toFixed(2));
   };
 
+  motion;
+
   return (
     <section className="py-16 bg-base-200">
       <MyContainer>
-        <h2 className="text-3xl font-bold text-accent flex items-start gap-2 mb-6">
+        <motion.h2
+          initial={{ opacity: 0, y: -100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl font-bold text-accent flex items-start gap-2 mb-6"
+        >
           <FaCalculator /> Smart Loan Calculator
-        </h2>
+        </motion.h2>
 
         <p className="text-accent-content mb-8 max-w-2xl">
           Easily estimate your monthly EMI and total repayment amount before

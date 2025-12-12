@@ -3,6 +3,7 @@ import MyContainer from "../../../components/MyContainer";
 import { Autoplay, EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { motion } from "motion/react";
 
 const CustomerFeedback = () => {
   const testimonials = [
@@ -80,15 +81,23 @@ const CustomerFeedback = () => {
     },
   ];
 
+  motion;
+
   return (
     <section className="py-16 bg-base-100">
       <MyContainer>
-        <div className="text-center mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
           <h2 className="text-3xl font-bold text-accent">Customer Feedback</h2>
           <p className="text-accent-content mt-2">
             Here's what our customers say about our service.
           </p>
-        </div>
+        </motion.div>
 
         <div className="md:block hidden">
           <Swiper

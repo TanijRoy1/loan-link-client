@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import MyContainer from "../components/MyContainer";
 import Logo from "../components/Logo";
 
 const AuthLayout = () => {
+  const [theme] = useState(localStorage.getItem("theme") || "dark");
+
+  useEffect(() => {
+    document.querySelector("html").setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   return (
     <MyContainer className={`py-10`}>
       <Logo></Logo>

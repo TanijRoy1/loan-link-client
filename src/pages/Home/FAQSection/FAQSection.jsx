@@ -1,6 +1,6 @@
-import React from 'react';
-import MyContainer from '../../../components/MyContainer';
-
+import React from "react";
+import MyContainer from "../../../components/MyContainer";
+import { motion } from "motion/react";
 
 const faqs = [
   {
@@ -45,31 +45,72 @@ const faqs = [
   },
 ];
 
+const listVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 100 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
 const FAQSection = () => {
+  motion;
   return (
     <section className="py-16 bg-base-100">
       <MyContainer>
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-accent">Frequently Asked Questions</h2>
+        <motion.div
+          initial={{ opacity: 0, y: -100 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-8"
+        >
+          <h2 className="text-3xl font-bold text-accent">
+            Frequently Asked Questions
+          </h2>
           <p className="text-accent-content mt-2">
-            Answers to common questions about applying, fees, approvals and managing your loan.
+            Answers to common questions about applying, fees, approvals and
+            managing your loan.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1  gap-6">
+        <motion.div
+          variants={listVariant}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.2 }}
+          className="grid grid-cols-1  gap-6"
+        >
           {faqs.map((item, idx) => (
-            <details key={idx} className="group bg-base-200 rounded-lg p-5 open:shadow-lg">
+            <motion.details
+              variants={itemVariant}
+              key={idx}
+              className="group bg-base-200 rounded-lg p-5 open:shadow-lg"
+            >
               <summary className="cursor-pointer list-none outline-none flex items-center justify-between">
                 <span className="text-accent font-medium">{item.q}</span>
-                <span className="ml-3 text-primary transition-transform group-open:rotate-180">▾</span>
+                <span className="ml-3 text-primary transition-transform group-open:rotate-180">
+                  ▾
+                </span>
               </summary>
 
               <div className="mt-4 text-accent-content">
                 <p>{item.a}</p>
               </div>
-            </details>
+            </motion.details>
           ))}
-        </div>
+        </motion.div>
 
         <div className="text-center mt-8">
           <a href="/contact" className="btn btn-primary">
@@ -79,7 +120,6 @@ const FAQSection = () => {
       </MyContainer>
     </section>
   );
-}
-
+};
 
 export default FAQSection;

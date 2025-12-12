@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import loadingAnimationData from "../../../assets/json/paymentLoading.json";
 import Lottie from "react-lottie";
 import useAuth from "../../../hooks/useAuth";
+import { useNavigate } from "react-router";
 
 const AddLoan = () => {
   const {
@@ -18,6 +19,7 @@ const AddLoan = () => {
   const [preview, setPreview] = useState("");
   const axiosSecure = useAxiosSecure();
   const [postLoading, setPostLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -62,6 +64,7 @@ const AddLoan = () => {
                 timer: 1500,
               });
               setPostLoading(false);
+              navigate("/dashboard/manage-loans");
             }
           })
           .catch((err) => {

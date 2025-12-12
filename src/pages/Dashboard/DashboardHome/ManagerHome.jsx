@@ -174,8 +174,8 @@ const ManagerHome = () => {
             <h3 className="text-lg font-semibold mb-2">Top Categories</h3>
             <ul className="space-y-2 text-sm text-accent-content">
               {applicationsByCategory.map((stat) => (
-                <li key={stat.category || "Education"}>
-                  {stat.category || "Education"} — {stat.count}
+                <li key={stat.category}>
+                  {stat.category} — {stat.count}
                 </li>
               ))}
             </ul>
