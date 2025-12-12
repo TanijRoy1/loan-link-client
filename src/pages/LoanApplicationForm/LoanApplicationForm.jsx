@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -8,18 +8,20 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import Swal from "sweetalert2";
 import Lottie from "react-lottie";
 import loadingAnimationData from "../../assets/json/paymentLoading.json";
+import SuccessConfetti from "../../components/SuccessConfetti";
 
 const LoanApplicationForm = () => {
   const { id: loanId } = useParams();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const [postLoading, setPostLoading] = useState(false);
-  const navigate = useNavigate();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const { data: loan = {}, isLoading } = useQuery({
@@ -41,6 +43,7 @@ const LoanApplicationForm = () => {
     // console.log(data);
 
     setPostLoading(true);
+    setShowConfetti(false);
     axiosSecure
       .post("/loan-applications", data)
       .then((res) => {
@@ -48,12 +51,15 @@ const LoanApplicationForm = () => {
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your application has been submitted",
+            title: "Your loan application has been submitted successfully.",
+            text: "Please proceed to the 'My Loans' page to complete the payment.",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2000,
           });
           setPostLoading(false);
-          navigate("/dashboard/my-loans");
+          setShowConfetti(true);
+          reset();
+          // navigate("/dashboard/my-loans");
         }
       })
       .catch((err) => {
@@ -68,6 +74,11 @@ const LoanApplicationForm = () => {
 
   return (
     <section className="py-12">
+      <SuccessConfetti
+        active={showConfetti}
+        duration={8000}
+        onComplete={() => setShowConfetti(false)}
+      ></SuccessConfetti>
       <div className="max-w-3xl mx-auto px-6 bg-base-100 rounded-md shadow p-6">
         <h2 className="text-2xl font-semibold mb-4">Loan Application</h2>
 

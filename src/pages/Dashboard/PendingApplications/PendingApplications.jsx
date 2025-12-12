@@ -10,7 +10,7 @@ const PendingApplications = () => {
   const detailsMotalRef = useRef();
 
   const {
-    data: applications = [],
+    data: applicationsData = [],
     isLoading,
     refetch,
   } = useQuery({
@@ -20,6 +20,7 @@ const PendingApplications = () => {
       return res.data;
     },
   });
+  const applications = applicationsData.applications || [];
 
   const handleApproveApplication = (application) => {
     Swal.fire({

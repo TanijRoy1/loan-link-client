@@ -12,7 +12,7 @@ const MyLoans = () => {
   const detailsMotalRef = useRef();
 
   const {
-    data: applications = [],
+    data: applicationsData = [],
     isLoading,
     refetch,
   } = useQuery({
@@ -24,6 +24,7 @@ const MyLoans = () => {
       return res.data;
     },
   });
+  const applications = applicationsData.applications || [];
 
   const handlePayment = async (application) => {
     const paymentInfo = {

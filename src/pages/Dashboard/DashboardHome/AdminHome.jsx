@@ -202,7 +202,7 @@ const AdminHome = () => {
             ))}
           </div>
 
-          <div className="mt-4 h-45 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
+          <div className="mt-4 h-45 flex items-center justify-center border-2 border-dashed border-accent-content rounded-lg">
             <div className="h-full w-88">
               <PieChart
                 style={{

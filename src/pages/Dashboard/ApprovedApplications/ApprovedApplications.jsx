@@ -8,13 +8,14 @@ const ApprovedApplications = () => {
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
-  const { data: applications = [], isLoading } = useQuery({
+  const { data: applicationsData = [], isLoading } = useQuery({
     queryKey: ["loan-applications", "approved"],
     queryFn: async () => {
       const res = await axiosSecure.get("/loan-applications?status=approved");
       return res.data;
     },
   });
+  const applications = applicationsData.applications || [];
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);

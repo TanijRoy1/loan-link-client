@@ -8,15 +8,23 @@ const LoanApplications = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
+  const limit = 10;
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const { data: applications = [], isLoading } = useQuery({
-    queryKey: ["applications", selectedStatus],
+  const { data: applicationsData = [], isLoading } = useQuery({
+    queryKey: ["applications", selectedStatus, currentPage, limit],
     queryFn: async () => {
-      const url = `/loan-applications?status=${selectedStatus}`;
+      const url = `/loan-applications?status=${selectedStatus}&limit=${limit}&skip=${
+        currentPage * limit
+      }`;
       const res = await axiosSecure.get(url);
       return res.data;
     },
   });
+
+  const applications = applicationsData.applications || [];
+  const totalApplicationsCount = applicationsData.count || 0;
+  const totalPages = Math.ceil(totalApplicationsCount / limit);
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
@@ -37,6 +45,7 @@ const LoanApplications = () => {
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
             <option value="rejected">Rejected</option>
+            <option value="applied">Applied</option>
           </select>
         </div>
 
@@ -185,6 +194,37 @@ const LoanApplications = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Pagination button */}
+              <div className="flex gap-2 justify-center py-10">
+                {currentPage > 0 && (
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    className="btn btn-sm"
+                  >
+                    Prev
+                  </button>
+                )}
+                {[...Array(totalPages).keys()].map((i) => (
+                  <button
+                    onClick={() => setCurrentPage(i)}
+                    key={i}
+                    className={`btn btn-sm ${
+                      currentPage === i && "btn-primary"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                {currentPage < totalPages - 1 && (
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    className="btn btn-sm"
+                  >
+                    Next
+                  </button>
+                )}
               </div>
             </div>
           )}
