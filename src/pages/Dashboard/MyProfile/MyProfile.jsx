@@ -75,7 +75,7 @@ const MyProfile = () => {
               <span
                 className={`px-2 py-0.5 rounded-full font-medium capitalize border block ${
                   user.role === "admin"
-                    ? "text-red-600 border-red-500"
+                    ? "text-green-600 border-green-500"
                     : user.role === "manager"
                     ? "text-blue-600 border-blue-500"
                     : user.role === "borrower"
@@ -163,7 +163,7 @@ const MyProfile = () => {
           </div>
         )}
         {role === "admin" && status !== "approved" && (
-          <div className="w-full mt-3 p-3 rounded-md border border-red-500 text-red-600 flex items-start gap-2">
+          <div className="w-full mt-3 p-3 rounded-md border border-green-500 text-green-600 flex items-start gap-2">
             <FaInfoCircle className="text-lg" />
             <p className="text-sm">
               {`Your admin account is currently ${status}. Administrative privileges, including user and system management, will be fully available once your account is approved.`}

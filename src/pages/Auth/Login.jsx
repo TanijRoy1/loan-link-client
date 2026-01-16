@@ -124,7 +124,7 @@ const Login = () => {
       <div className="flex flex-col gap-2">
         <button
           onClick={() => handleDemoLogin("admin")}
-          className="btn btn-outline border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+          className="btn btn-outline btn-secondary"
         >
           Demo Admin Login
         </button>
@@ -138,7 +138,7 @@ const Login = () => {
 
         <button
           onClick={() => handleDemoLogin("borrower")}
-          className="btn btn-outline btn-secondary"
+          className="btn btn-outline  border-purple-500 text-purple-500 hover:bg-purple-500 hover:text-white"
         >
           Demo Borrower Login
         </button>
