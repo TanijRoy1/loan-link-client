@@ -214,10 +214,10 @@ const ManageUsers = () => {
                           <span
                             className={`${
                               user.role === "admin"
-                                ? "text-blue-600"
+                                ? "text-green-600"
                                 : user.role === "manager"
-                                ? "text-purple-600"
-                                : "text-green-600"
+                                ? "text-blue-600"
+                                : "text-purple-600"
                             } border rounded px-2 py-1 capitalize`}
                           >
                             {user.role}
