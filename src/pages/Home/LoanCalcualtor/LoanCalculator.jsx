@@ -28,11 +28,11 @@ const LoanCalculator = () => {
     <section className="py-16 bg-base-200">
       <MyContainer>
         <motion.h2
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
-          className="text-3xl font-bold text-accent flex items-start gap-2 mb-6"
+          className="sm:text-3xl text-2xl font-bold text-accent flex items-start gap-2 mb-6"
         >
           <FaCalculator /> Smart Loan Calculator
         </motion.h2>

@@ -75,7 +75,7 @@ const Register = () => {
             type="text"
             {...register("name", { required: true })}
             className="input w-full"
-            placeholder="Name"
+            // placeholder="Name"
           />
           {errors.name?.type === "required" && (
             <p className="text-red-500">Password is required</p>
@@ -85,7 +85,7 @@ const Register = () => {
             type="file"
             {...register("photo", { required: true })}
             className="file-input w-full"
-            placeholder="Photo"
+            // placeholder="Photo"
           />
           {errors.photo?.type === "required" && (
             <p className="text-red-500">Password is required</p>
@@ -112,7 +112,7 @@ const Register = () => {
             type="email"
             {...register("email", { required: true })}
             className="input w-full"
-            placeholder="Email"
+            // placeholder="Email"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is required</p>
@@ -127,7 +127,7 @@ const Register = () => {
                 /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
             })}
             className="input w-full"
-            placeholder="Password"
+            // placeholder="Password"
           />
           {errors.password?.type === "required" && (
             <p className="text-red-500">Password is required</p>

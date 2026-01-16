@@ -70,13 +70,13 @@ const FAQSection = () => {
     <section className="py-16 bg-base-100">
       <MyContainer>
         <motion.div
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
-          <h2 className="text-3xl font-bold text-accent">
+          <h2 className="sm:text-3xl text-2xl font-bold text-accent">
             Frequently Asked Questions
           </h2>
           <p className="text-accent-content mt-2">

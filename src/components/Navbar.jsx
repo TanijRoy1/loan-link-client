@@ -46,11 +46,56 @@ export default function Navbar() {
             </NavLink>
             {user ? (
               <>
-                <img
-                  src={user?.photoURL}
-                  alt={user?.displayName}
-                  className="w-9 h-9 border-2 border-primary rounded-full"
-                />
+                <div className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="">
+                    <img
+                      src={user?.photoURL}
+                      alt={user?.displayName}
+                      className="w-9 h-9 border-2 border-primary rounded-full"
+                    />
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content z-1 mt-3 w-64 rounded-xl bg-base-100 p-4 shadow-lg transform -translate-x-45"
+                  >
+                    <li className="mb-3 cursor-default">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={user?.photoURL}
+                          alt={user?.displayName}
+                          className="h-12 w-12 rounded-full border border-primary"
+                        />
+                        <div>
+                          <p className="font-semibold leading-tight">
+                            {user?.displayName || "User Name"}
+                          </p>
+                          <p className="text-xs opacity-70">{user?.email}</p>
+                        </div>
+                      </div>
+                    </li>
+
+                    <div className="divider my-2"></div>
+
+                    <li>
+                      <Link
+                        to={`/dashboard/profile`}
+                        className="btn btn-sm btn-primary w-full"
+                      >
+                        View Profile
+                      </Link>
+                    </li>
+
+                    <li className="mt-2">
+                      <button
+                        onClick={handleSignOutUser}
+                        className="btn btn-sm btn-outline btn-primary w-full"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+
                 <button
                   onClick={handleSignOutUser}
                   className="btn btn-outline btn-primary"

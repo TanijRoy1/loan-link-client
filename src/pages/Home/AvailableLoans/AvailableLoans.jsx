@@ -3,8 +3,9 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import MyContainer from "../../../components/MyContainer";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+// import LoadingSpinner from "../../../components/LoadingSpinner";
 import { motion } from "motion/react";
+import LoanCardSkeleton from "../../../components/LoanCardSkeleton";
 
 const listVariant = {
   hidden: { opacity: 0 },
@@ -17,7 +18,7 @@ const listVariant = {
 };
 
 const itemVariant = {
-  hidden: { opacity: 0, y: 100 },
+  hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
     y: 0,
@@ -37,7 +38,13 @@ const AvailableLoans = () => {
   });
 
   if (isLoading) {
-    return <LoadingSpinner></LoadingSpinner>;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        {[...Array(8)].map((_, i) => (
+          <LoanCardSkeleton key={i}></LoanCardSkeleton>
+        ))}
+      </div>
+    );
   }
 
   motion;
@@ -46,9 +53,9 @@ const AvailableLoans = () => {
     <section className="py-12 bg-base-100">
       <MyContainer className="">
         <motion.div
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="flex items-center justify-between flex-wrap mb-6"
         >
@@ -69,14 +76,14 @@ const AvailableLoans = () => {
             variants={listVariant}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2"
           >
             {loans.map((loan) => (
               <motion.div
                 key={loan._id}
                 variants={itemVariant}
-                className="bg-base-200 rounded-lg shadow-md border border-base-300 p-4 flex flex-col hover:shadow-2xl transform hover:-translate-y-2 transition duration-300"
+                className="bg-base-200 rounded shadow border border-base-300 p-3 flex flex-col hover:shadow-xl transform hover:-translate-y-0.5 transition duration-300"
               >
                 <div className="h-40 rounded overflow-hidden mb-3">
                   <img

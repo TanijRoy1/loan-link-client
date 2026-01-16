@@ -87,7 +87,7 @@ const AddLoan = () => {
               type="text"
               {...register("title", { required: true })}
               className="input w-full"
-              placeholder="Loan Title"
+              // placeholder="Loan Title"
             />
             {errors.title && (
               <p className="text-red-500">Loan Title is required</p>
@@ -99,7 +99,7 @@ const AddLoan = () => {
             <textarea
               {...register("description", { required: true })}
               className="textarea w-full"
-              placeholder="Detailed description"
+              // placeholder="Detailed description"
               rows={5}
             />
             {errors.description && (
@@ -113,13 +113,13 @@ const AddLoan = () => {
               type="text"
               {...register("category", { required: true })}
               className="input w-full"
-              placeholder="e.g., Agriculture"
+              // placeholder="e.g., Agriculture"
             />
             {errors.category && (
               <p className="text-red-500">Category is required</p>
             )}
 
-            <div>
+            <div className="mt-4">
               <label className="label">Interest Rate (%)</label>
               <input
                 type="text"
@@ -129,7 +129,7 @@ const AddLoan = () => {
                   min: 0,
                 })}
                 className="input w-full"
-                placeholder="e.g., 6.5"
+                // placeholder="e.g., 6.5"
               />
               {errors.interestRate?.type === "required" && (
                 <p className="text-red-500">Interest Rate is required</p>
@@ -141,7 +141,7 @@ const AddLoan = () => {
               )}
             </div>
 
-            <div>
+            <div className="mt-4">
               <label className="label">Max Loan Limit</label>
               <input
                 type="text"
@@ -150,7 +150,7 @@ const AddLoan = () => {
                   min: 1,
                 })}
                 className="input w-full"
-                placeholder="e.g., 200000"
+                // placeholder="e.g., 200000"
               />
               {errors.maxLoanLimit?.type === "required" && (
                 <p className="text-red-500">Max Loan Limit is required</p>
@@ -168,8 +168,8 @@ const AddLoan = () => {
               type="text"
               {...register("requiredDocuments", { required: true })}
               className="input w-full"
-              defaultValue={"National ID, Photo"}
-              placeholder="e.g., National ID, Photo"
+              // defaultValue={"National ID, Photo"}
+              // placeholder="e.g., National ID, Photo"
             />
             {errors.requiredDocuments && (
               <p className="text-red-500">Required Documents are required</p>
@@ -181,8 +181,8 @@ const AddLoan = () => {
               type="text"
               {...register("emiPlans", { required: true })}
               className="input w-full"
-              defaultValue={"3 months, 6 months, 12 months"}
-              placeholder="e.g., 6 months, 12 months, 8 months"
+              // defaultValue={"3 months, 6 months, 12 months"}
+              // placeholder="e.g., 6 months, 12 months, 8 months"
             />
             {errors.emiPlans && (
               <p className="text-red-500"> EMI Plans are required</p>

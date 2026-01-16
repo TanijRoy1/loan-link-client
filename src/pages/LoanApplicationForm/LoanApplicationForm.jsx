@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
@@ -16,6 +16,7 @@ const LoanApplicationForm = () => {
   const { user } = useAuth();
   const [postLoading, setPostLoading] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -58,8 +59,8 @@ const LoanApplicationForm = () => {
           });
           setPostLoading(false);
           setShowConfetti(true);
+          navigate("/dashboard/my-loans");
           reset();
-          // navigate("/dashboard/my-loans");
         }
       })
       .catch((err) => {
@@ -122,7 +123,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("firstName", { required: true })}
               className="input w-full"
-              placeholder="First Name"
+              // placeholder="First Name"
             />
             {errors.firstName?.type === "required" && (
               <p className="text-red-500">First name is required</p>
@@ -135,7 +136,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("lastName", { required: true })}
               className="input w-full"
-              placeholder="Last Name"
+              // placeholder="Last Name"
             />
             {errors.lastName?.type === "required" && (
               <p className="text-red-500">Last name is required</p>
@@ -148,7 +149,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("contactNumber", { required: true, minLength: 8 })}
               className="input w-full"
-              placeholder="e.g. +8801712345678"
+              // placeholder="e.g. +8801712345678"
             />
             {errors.contactNumber?.type === "required" && (
               <p className="text-red-500">Contact number is required</p>
@@ -164,7 +165,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("nationalId", { required: true })}
               className="input w-full"
-              placeholder="National ID or Passport"
+              // placeholder="National ID or Passport"
             />
             {errors.nationalId?.type === "required" && (
               <p className="text-red-500">National ID is required</p>
@@ -177,7 +178,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("incomeSource", { required: true })}
               className="input w-full"
-              placeholder="e.g., Farming / Tailoring"
+              // placeholder="e.g., Farming / Tailoring"
             />
             {errors.incomeSource?.type === "required" && (
               <p className="text-red-500">Income source is required</p>
@@ -190,7 +191,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("monthlyIncome", { required: true, min: 1 })}
               className="input w-full"
-              placeholder="Monthly income"
+              // placeholder="Monthly income"
             />
             {errors.monthlyIncome?.type === "required" && (
               <p className="text-red-500">Monthly income is required</p>
@@ -206,7 +207,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("loanAmount", { required: true, min: 1 })}
               className="input w-full"
-              placeholder={`Max ${loan?.maxLoanLimit || ""}`}
+              // placeholder={`Max ${loan?.maxLoanLimit || ""}`}
             />
             {errors.loanAmount?.type === "required" && (
               <p className="text-red-500">Loan amount is required</p>
@@ -221,7 +222,7 @@ const LoanApplicationForm = () => {
             <textarea
               {...register("reason", { required: true })}
               className="textarea w-full"
-              placeholder="Explain why you need this loan"
+              // placeholder="Explain why you need this loan"
               rows={4}
             />
             {errors.reason?.type === "required" && (
@@ -235,7 +236,7 @@ const LoanApplicationForm = () => {
               type="text"
               {...register("address", { required: true })}
               className="input w-full"
-              placeholder="Address"
+              // placeholder="Address"
             />
             {errors.address?.type === "required" && (
               <p className="text-red-500">Address is required</p>
@@ -247,7 +248,7 @@ const LoanApplicationForm = () => {
             <textarea
               {...register("extraNotes")}
               className="textarea w-full"
-              placeholder="Optional notes"
+              // placeholder="Optional notes"
               rows={3}
             />
           </div>

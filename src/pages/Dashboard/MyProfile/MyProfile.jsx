@@ -73,7 +73,9 @@ const MyProfile = () => {
               </div>
               <span
                 className={`px-2 py-0.5 rounded-full font-medium capitalize border block ${
-                  user.role === "manager"
+                  user.role === "admin"
+                    ? "text-red-600 border-red-500"
+                    : user.role === "manager"
                     ? "text-blue-600 border-blue-500"
                     : user.role === "borrower"
                     ? "text-purple-600 border-purple-500"
@@ -157,6 +159,14 @@ const MyProfile = () => {
           >
             <FaInfoCircle className="text-lg" />
             <p className="text-sm">{`Your account is ${status} approval. You will be able to create or modify loans, and manage application approvals once an administrator approves your profile.`}</p>
+          </div>
+        )}
+        {role === "admin" && status !== "approved" && (
+          <div className="w-full mt-3 p-3 rounded-md border border-red-500 text-red-600 flex items-start gap-2">
+            <FaInfoCircle className="text-lg" />
+            <p className="text-sm">
+              {`Your admin account is currently ${status}. Administrative privileges, including user and system management, will be fully available once your account is approved.`}
+            </p>
           </div>
         )}
 

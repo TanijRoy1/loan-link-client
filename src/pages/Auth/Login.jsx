@@ -43,7 +43,7 @@ const Login = () => {
             type="email"
             {...register("email", { required: true })}
             className="input w-full"
-            placeholder="Email"
+            // placeholder="Email"
           />
           {errors.email?.type === "required" && (
             <p className="text-red-500">Email is required</p>
@@ -58,7 +58,7 @@ const Login = () => {
                 /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/,
             })}
             className="input w-full"
-            placeholder="Password"
+            // placeholder="Password"
           />
           {errors.password?.type === "required" && (
             <p className="text-red-500">Password is required</p>

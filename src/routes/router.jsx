@@ -55,7 +55,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "loans/:id",
-                element: <PrivateRoute><LoanDetails></LoanDetails></PrivateRoute>
+                Component: LoanDetails
             },
             {
                 path: "apply-loan/:id",

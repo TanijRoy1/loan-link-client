@@ -65,25 +65,25 @@ const HowItWorks = () => {
     <section className="py-16 bg-base-200">
       <MyContainer>
         <motion.div
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold text-accent">How It Works</h2>
+          <h2 className="sm:text-3xl text-2xl font-bold text-accent">How It Works</h2>
           <p className="text-accent-content mt-2">
             Follow these simple steps to apply for your loan quickly and
             securely.
           </p>
         </motion.div>
 
-        {/* Steps */}
+        
         <motion.div
           variants={listVariant}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 llg:gap-8 gap-4"
         >
           {steps.map((step) => (
