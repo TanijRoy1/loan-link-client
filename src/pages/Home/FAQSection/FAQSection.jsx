@@ -72,7 +72,7 @@ const FAQSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="text-center mb-8"
         >
@@ -89,7 +89,7 @@ const FAQSection = () => {
           variants={listVariant}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-1  gap-6"
         >
           {faqs.map((item, idx) => (

@@ -187,11 +187,11 @@ const ManagerHome = () => {
         <div className="text-sm text-accent-content">
           Last updated: {new Date().toLocaleString()}
         </div>
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <button className="btn px-4 py-2 border rounded-2xl">
             Export CSV
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

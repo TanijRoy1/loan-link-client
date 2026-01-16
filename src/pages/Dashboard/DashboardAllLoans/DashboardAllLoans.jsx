@@ -18,7 +18,7 @@ const DashboardAllLoans = () => {
     queryKey: ["all-loans"],
     queryFn: async () => {
       const res = await axiosSecure.get("/loans");
-      return res.data;
+      return res.data.loans;
     },
   });
 

@@ -5,6 +5,21 @@ import useAuth from "../../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
+const DEMO_USERS = {
+  admin: {
+    email: "tanijroy@gmail.com",
+    password: "Tanij123@",
+  },
+  manager: {
+    email: "rayhankabir@gmail.com",
+    password: "Tanij123@",
+  },
+  borrower: {
+    email: "forhadali@gmail.com",
+    password: "Tanij123@",
+  },
+};
+
 const Login = () => {
   const { signInUser } = useAuth();
   const {
@@ -29,6 +44,20 @@ const Login = () => {
         } else {
           toast.error("Login failed. Please check your credentials.");
         }
+      });
+  };
+
+  const handleDemoLogin = (role) => {
+    const demoUser = DEMO_USERS[role];
+    if (!demoUser) return;
+
+    signInUser(demoUser.email, demoUser.password)
+      .then(() => {
+        toast.success(`Demo ${role} logged in successfully`);
+        navigate(location.state || "/");
+      })
+      .catch(() => {
+        toast.error("Demo login failed");
       });
   };
 
@@ -90,6 +119,31 @@ const Login = () => {
           Register
         </Link>
       </p>
+      <div className="divider">Demo Login</div>
+
+      <div className="flex flex-col gap-2">
+        <button
+          onClick={() => handleDemoLogin("admin")}
+          className="btn btn-outline border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+        >
+          Demo Admin Login
+        </button>
+
+        <button
+          onClick={() => handleDemoLogin("manager")}
+          className="btn btn-outline btn-primary"
+        >
+          Demo Manager Login
+        </button>
+
+        <button
+          onClick={() => handleDemoLogin("borrower")}
+          className="btn btn-outline btn-secondary"
+        >
+          Demo Borrower Login
+        </button>
+      </div>
+
       <SocialLogin></SocialLogin>
     </div>
   );

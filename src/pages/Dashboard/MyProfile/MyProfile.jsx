@@ -14,6 +14,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/LoadingSpinner";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
+import EditProfileForm from "./EditProfileForm";
 
 const MyProfile = () => {
   const { _id, role, status } = useRole();
@@ -171,13 +172,36 @@ const MyProfile = () => {
         )}
 
         <button
+          onClick={() =>
+            document.getElementById("edit_profile_modal").showModal()
+          }
+          className="btn btn-outline btn-primary btn-sm w-full  mt-6 "
+        >
+          Edit Profile
+        </button>
+
+        <button
           onClick={handleSignOutUser}
-          className="btn btn-sm mt-6 w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white"
+          className="btn btn-sm w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white"
         >
           <FaSignOutAlt />
           Logout
         </button>
       </div>
+
+      <dialog id="edit_profile_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg mb-4">Edit Profile</h3>
+
+          <EditProfileForm user={user}></EditProfileForm>
+
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn btn-sm">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

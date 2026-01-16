@@ -19,7 +19,7 @@ const ManageLoans = () => {
     queryKey: ["all-loans", searchText],
     queryFn: async () => {
       const res = await axiosSecure.get(`/loans?searchText=${searchText}`);
-      return res.data;
+      return res.data.loans;
     },
   });
 
