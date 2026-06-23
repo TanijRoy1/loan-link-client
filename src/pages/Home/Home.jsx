@@ -16,7 +16,7 @@ const Home = () => {
       <HeroBanner></HeroBanner>
       <TrustedSecurity></TrustedSecurity>
       <WhyChooseLoanLink></WhyChooseLoanLink>
-      <AvailableLoans></AvailableLoans>
+      {/* <AvailableLoans></AvailableLoans> */}
       <EligibilityChecker></EligibilityChecker>
       <HowItWorks></HowItWorks>
       <CustomerFeedback></CustomerFeedback>
