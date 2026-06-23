@@ -9,7 +9,7 @@ const ApprovedApplications = () => {
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
-  const { data: applicationsData = [], isLoading } = useQuery({
+  const { data: applicationsData = [], isLoading, refetch } = useQuery({
     queryKey: ["loan-applications", "approved"],
     queryFn: async () => {
       const res = await axiosSecure.get("/loan-applications?status=approved");
@@ -144,6 +144,7 @@ const ApprovedApplications = () => {
         <ApplicationDetailsModal
           application={selectedApplication}
           modalRef={detailsMotalRef}
+          refetchApplications={refetch}
         />
       </div>
     </section>
