@@ -1,6 +1,6 @@
 import React from "react";
 import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const ApplicationDetailsModal = ({
@@ -21,7 +21,12 @@ const ApplicationDetailsModal = ({
     },
 
     onSuccess: async (response) => {
-      toast.success("AI report generated successfully");
+      Swal.fire({
+        icon: "success",
+        title: "AI Report Generated",
+        text: "The report is ready for download.",
+        confirmButtonText: "OK",
+      });
 
       // refresh parent list so modal gets updated data
       await refetchApplications();
@@ -35,14 +40,52 @@ const ApplicationDetailsModal = ({
     },
 
     onError: (error) => {
-      toast.error(
-        error?.response?.data?.message || "Failed to generate AI report",
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Generation Failed",
+        text: error?.response?.data?.message || "Failed to generate AI report",
+      });
     },
   });
 
   const handleGenerateReport = () => {
     generateReportMutation.mutate();
+  };
+
+  // Download AI Report
+  const handleDownloadReport = async () => {
+    try {
+      const response = await axiosSecure.get(
+        `/api/ai/reports/download/${application.aiReportId}`,
+        {
+          responseType: "blob",
+        },
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const link = document.createElement("a");
+
+      link.href = url;
+
+      link.setAttribute(
+        "download",
+        `loan-report-${application.aiReportId}.pdf`,
+      );
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Download Failed",
+        text: "Could not download AI report",
+      });
+    }
   };
 
   // prevent crash if modal opens before data loads
@@ -194,7 +237,10 @@ const ApplicationDetailsModal = ({
                 {new Date(application.aiGeneratedAt).toLocaleString()}
               </p>
 
-              <button className="btn btn-success btn-sm">
+              <button
+                onClick={handleDownloadReport}
+                className="btn btn-success btn-sm"
+              >
                 Download Report
               </button>
             </div>
