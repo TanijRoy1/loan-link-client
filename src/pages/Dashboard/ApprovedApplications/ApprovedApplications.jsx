@@ -17,6 +17,7 @@ const ApprovedApplications = () => {
     },
   });
   const applications = applicationsData.applications || [];
+  console.log(applications);
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
@@ -145,6 +146,7 @@ const ApprovedApplications = () => {
           application={selectedApplication}
           modalRef={detailsMotalRef}
           refetchApplications={refetch}
+          setSelectedApplication={setSeletedApplication}
         />
       </div>
     </section>

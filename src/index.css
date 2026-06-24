@@ -45,4 +45,7 @@ body {
     @apply bg-secondary text-base-100
 }
 
+.react-hot-toast {
+  z-index: 999999 !important;
+}
 

@@ -7,6 +7,7 @@ const ApplicationDetailsModal = ({
   application,
   modalRef,
   refetchApplications,
+  setSelectedApplication,
 }) => {
   const axiosSecure = useAxiosSecure();
 
@@ -15,19 +16,22 @@ const ApplicationDetailsModal = ({
   // -----------------------------
   const generateReportMutation = useMutation({
     mutationFn: async () => {
-      const res = await axiosSecure.post(
-        `/api/ai/reports/${application.loanId}`,
-      );
+      const res = await axiosSecure.post(`/api/ai/reports/${application._id}`);
       return res.data;
     },
 
-    onSuccess: async () => {
+    onSuccess: async (response) => {
       toast.success("AI report generated successfully");
 
       // refresh parent list so modal gets updated data
-      if (refetchApplications) {
-        await refetchApplications();
-      }
+      await refetchApplications();
+
+      setSelectedApplication((prev) => ({
+        ...prev,
+        aiReportGenerated: true,
+        aiReportId: response.data?.id,
+        aiGeneratedAt: new Date().toISOString(),
+      }));
     },
 
     onError: (error) => {

@@ -16,6 +16,11 @@ createRoot(document.getElementById("root")).render(
         <RouterProvider router={router}></RouterProvider>
       </AuthProvider>
     </QueryClientProvider>
-    <Toaster position="top-center" reverseOrder={false} />
-  </StrictMode>
+    <Toaster
+      position="top-right"
+      containerStyle={{
+        zIndex: 999999,
+      }}
+    />
+  </StrictMode>,
 );
