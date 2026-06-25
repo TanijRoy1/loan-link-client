@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import Swal from "sweetalert2";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const ApplicationDetailsModal = ({
@@ -10,6 +9,8 @@ const ApplicationDetailsModal = ({
   setSelectedApplication,
 }) => {
   const axiosSecure = useAxiosSecure();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   // -----------------------------
   // AI REPORT GENERATION
@@ -21,39 +22,45 @@ const ApplicationDetailsModal = ({
     },
 
     onSuccess: async (response) => {
-      Swal.fire({
-        icon: "success",
-        title: "AI Report Generated",
-        text: "The report is ready for download.",
-        confirmButtonText: "OK",
-      });
+      setErrorMessage("");
 
-      // refresh parent list so modal gets updated data
+      setSuccessMessage(
+        "AI report generated successfully. You can now download the PDF report.",
+      );
+
       await refetchApplications();
 
       setSelectedApplication((prev) => ({
         ...prev,
         aiReportGenerated: true,
-        aiReportId: response.data?.id,
+        aiReportId: response?.data?.id,
         aiGeneratedAt: new Date().toISOString(),
       }));
     },
 
     onError: (error) => {
-      Swal.fire({
-        icon: "error",
-        title: "Generation Failed",
-        text: error?.response?.data?.message || "Failed to generate AI report",
-      });
+      console.log(error);
+
+      setSuccessMessage("");
+
+      setErrorMessage(
+        error?.response?.data?.message ||
+          "Failed to generate AI report. Please try again.",
+      );
     },
   });
 
   const handleGenerateReport = () => {
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    if (generateReportMutation.isPending) return;
     generateReportMutation.mutate();
   };
 
   // Download AI Report
   const handleDownloadReport = async () => {
+    setErrorMessage("");
     try {
       const response = await axiosSecure.get(
         `/api/ai/reports/download/${application.aiReportId}`,
@@ -80,11 +87,13 @@ const ApplicationDetailsModal = ({
       link.remove();
     } catch (error) {
       console.log(error);
-      Swal.fire({
-        icon: "error",
-        title: "Download Failed",
-        text: "Could not download AI report",
-      });
+
+      setSuccessMessage("");
+
+      setErrorMessage(
+        error?.response?.data?.message ||
+          "Download Failed. Could not download AI report. Please try again.",
+      );
     }
   };
 
@@ -92,7 +101,11 @@ const ApplicationDetailsModal = ({
   if (!application) return null;
 
   return (
-    <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+    <dialog
+      ref={modalRef}
+      className="modal modal-bottom sm:modal-middle"
+      style={{ zIndex: 40 }}
+    >
       <div className="modal-box max-w-3xl">
         {/* HEADER */}
         <div className="flex items-start justify-between gap-4">
@@ -221,6 +234,17 @@ const ApplicationDetailsModal = ({
         <div className="divider my-4" />
 
         <div className="space-y-3">
+          {successMessage && (
+            <div className="alert alert-success">
+              <span>{successMessage}</span>
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className="alert alert-error">
+              <span>{errorMessage}</span>
+            </div>
+          )}
           <h3 className="font-bold text-lg">AI Loan Analysis</h3>
 
           {application?.aiReportGenerated ? (
@@ -266,7 +290,15 @@ const ApplicationDetailsModal = ({
         {/* FOOTER */}
         <div className="modal-action mt-6">
           <form method="dialog">
-            <button className="btn">Close</button>
+            <button
+              onClick={() => {
+                setSuccessMessage("");
+                setErrorMessage("");
+              }}
+              className="btn"
+            >
+              Close
+            </button>
           </form>
         </div>
       </div>

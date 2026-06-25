@@ -45,7 +45,10 @@ body {
     @apply bg-secondary text-base-100
 }
 
-.react-hot-toast {
+
+.swal2-container {
   z-index: 999999 !important;
 }
-
+.modal {
+  z-index: 50 !important;
+}

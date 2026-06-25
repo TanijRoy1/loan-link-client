@@ -17,7 +17,7 @@ const ApprovedApplications = () => {
     },
   });
   const applications = applicationsData.applications || [];
-  console.log(applications);
+  // console.log(applications);
 
   const openDetailsModal = (application) => {
     setSeletedApplication(application);

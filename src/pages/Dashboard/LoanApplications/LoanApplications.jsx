@@ -230,6 +230,13 @@ const LoanApplications = () => {
           )}
         </div>
 
+{/* Application Details Modal
+        <ApplicationDetailsModal
+          application={selectedApplication}
+          modalRef={detailsMotalRef}
+          refetchApplications={refetch}
+          setSelectedApplication={setSeletedApplication}
+        /> */}
         {/* Application Details Modal */}
         <dialog
           ref={detailsMotalRef}

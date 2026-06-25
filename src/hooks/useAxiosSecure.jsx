@@ -27,7 +27,7 @@ const useAxiosSecure = () => {
             navigate("/login");
           });
         }
-      }
+      },
     );
 
     return () => {
