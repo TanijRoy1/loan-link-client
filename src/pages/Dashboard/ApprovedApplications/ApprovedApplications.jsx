@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -9,7 +9,11 @@ const ApprovedApplications = () => {
   const [selectedApplication, setSeletedApplication] = useState(null);
   const detailsMotalRef = useRef();
 
-  const { data: applicationsData = [], isLoading, refetch } = useQuery({
+  const {
+    data: applicationsData = [],
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["loan-applications", "approved"],
     queryFn: async () => {
       const res = await axiosSecure.get("/loan-applications?status=approved");
@@ -19,9 +23,18 @@ const ApprovedApplications = () => {
   const applications = applicationsData.applications || [];
   // console.log(applications);
 
+  useEffect(() => {
+    if (selectedApplication) {
+      detailsMotalRef.current?.showModal();
+    }
+  }, [selectedApplication]);
+
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
-    detailsMotalRef.current.showModal();
+
+    setTimeout(() => {
+      detailsMotalRef.current?.showModal();
+    }, 0);
   };
 
   return (

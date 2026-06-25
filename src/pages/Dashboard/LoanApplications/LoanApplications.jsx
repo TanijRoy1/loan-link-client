@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -31,9 +31,18 @@ const LoanApplications = () => {
   const totalApplicationsCount = applicationsData.count || 0;
   const totalPages = Math.ceil(totalApplicationsCount / limit);
 
+  useEffect(() => {
+    if (selectedApplication) {
+      detailsMotalRef.current?.showModal();
+    }
+  }, [selectedApplication]);
+
   const openDetailsModal = (application) => {
     setSeletedApplication(application);
-    detailsMotalRef.current.showModal();
+
+    setTimeout(() => {
+      detailsMotalRef.current?.showModal();
+    }, 0);
   };
 
   return (
